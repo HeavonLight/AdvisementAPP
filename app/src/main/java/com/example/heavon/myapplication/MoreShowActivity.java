@@ -62,6 +62,9 @@ public class MoreShowActivity extends BasicActivity {
         initUI();
     }
 
+    /**
+     * 初始化，用于接收参数
+     */
     public void initialize() {
         Bundle bundle = this.getIntent().getExtras();
         String type = bundle.getString("type");
@@ -70,6 +73,9 @@ public class MoreShowActivity extends BasicActivity {
         }
     }
 
+    /**
+     * 初始化UI
+     */
     public void initUI() {
 
         mShowNone = (TextView) findViewById(R.id.show_none);
@@ -142,6 +148,9 @@ public class MoreShowActivity extends BasicActivity {
         initToolBar(mType);
     }
 
+    /**
+     * 初始化节目列表
+     */
     public void initShowList() {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);
@@ -179,6 +188,9 @@ public class MoreShowActivity extends BasicActivity {
         });
     }
 
+    /**
+     * 加载更多节目
+     */
     public void loadMoreShow() {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);

@@ -92,7 +92,19 @@ public class ShowDao extends BaseDao {
 
     }
 
-    public Show getShow(){
+    public String getShowUrlById(int id){
+        String showUrl = HttpUtils.getHost()+ "Show/getShow/id/"+String.valueOf(id);
+
+        return showUrl;
+    }
+
+    public Show getShowById(int id){
+        Show show = new Show();
+
+        return show;
+    }
+
+    public Show getShowByFilter(ShowFilter filter, RequestQueue queue, final HttpResponse<Map<String, Object>> response){
         Show show = new Show();
 
         return show;

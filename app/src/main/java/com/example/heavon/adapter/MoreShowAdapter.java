@@ -1,6 +1,8 @@
 package com.example.heavon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.example.heavon.myapplication.R;
+import com.example.heavon.myapplication.ShowActivity;
 import com.example.heavon.utils.DensityUtil;
 import com.example.heavon.vo.Show;
 import com.squareup.picasso.Picasso;
@@ -48,9 +51,14 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
         holder.thumbIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /**----------wait to modify-----------**/
-                Toast.makeText(context, "click show "+holder.thumbIv.getTag(), Toast.LENGTH_SHORT).show();
-                /**----------wait to modify-----------**/
+                /**----------跳转到节目详情页-----------**/
+                Intent intent = new Intent(context, ShowActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("sid", (int)holder.thumbIv.getTag());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+//                Toast.makeText(context, "click show "+holder.thumbIv.getTag(), Toast.LENGTH_SHORT).show();
+                /**----------跳转到节目详情页-----------**/
             }
         });
         holder.investmentTv.setText(show.getInvestment_status());
