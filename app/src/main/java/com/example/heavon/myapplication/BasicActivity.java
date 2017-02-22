@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,7 +23,7 @@ public class BasicActivity extends AppCompatActivity {
     }
 
     //初始化顶部工具栏
-    public void initToolBar(String title){
+    public void initToolBar(@Nullable String title){
         System.out.println("startInitToolbar");
         /**开始初始化**/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_basic);
@@ -34,7 +35,9 @@ public class BasicActivity extends AppCompatActivity {
         //设置标题栏
         setTitle("");
         if(tvTitle == null){
-            setTitle(title);
+            if(title != null){
+                setTitle(title);
+            }
         }else{
             tvTitle.setText(title);
         }

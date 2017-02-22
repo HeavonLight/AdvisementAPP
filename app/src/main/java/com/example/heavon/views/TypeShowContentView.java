@@ -2,6 +2,8 @@ package com.example.heavon.views;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.heavon.myapplication.R;
+import com.example.heavon.myapplication.ShowActivity;
 import com.example.heavon.vo.Show;
 import com.squareup.picasso.Picasso;
 
@@ -76,9 +79,14 @@ public class TypeShowContentView extends LinearLayout {
         mThumbView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                /**----------wait to modify-----------**/
-                Toast.makeText(getContext(), "click show "+view.getTag(), Toast.LENGTH_SHORT).show();
-                /**----------wait to modify-----------**/
+                /**----------跳转到节目详情页-----------**/
+                Intent intent = new Intent(getContext(), ShowActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("sid", (int)view.getTag());
+                intent.putExtras(bundle);
+                getContext().startActivity(intent);
+//                Toast.makeText(getContext(), "click show "+view.getTag(), Toast.LENGTH_SHORT).show();
+                /**----------跳转到节目详情页-----------**/
             }
         });
 
