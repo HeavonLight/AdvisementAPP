@@ -4,10 +4,147 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.RegisterActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_basic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        style="@style/ToolBar">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/ToolBar.Title"
+            android:text="@string/register_title" />
+    </android.support.v7.widget.Toolbar>
+
+    <!--<RelativeLayout
+        android:id="@+id/navigator_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_return"
+            android:text="返回"
+            android:layout_width="60dp"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/register_title" />
+
+    </RelativeLayout>-->
+
+    <!-- Register progress -->
+    <ProgressBar
+        android:id="@+id/register_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/register_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp"
+        android:layout_below="@id/toolbar_basic">
+
+        <LinearLayout
+            android:id="@+id/phone_register_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logo"
+                android:layout_gravity="center_horizontal"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/username"
+                android:layout_marginTop="80dp"
+                android:background="@drawable/bg_edittext"
+                style="@style/EditText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:hint="@string/prompt_username"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/edittext_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height">
+
+                <EditText
+                    android:id="@+id/verify"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    style="@style/EditText"
+                    android:hint="@string/prompt_verify"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/bt_verify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/edittext_height"
+                    style="@style/Link"
+                    android:text="@string/link_verify_short"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBorder"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignLeft="@id/bt_verify"
+                    />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_marginTop="@dimen/edittext_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                style="@style/EditText"
+                android:hint="@string/prompt_password_register"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/bt_register"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edittext_height"
+                android:layout_marginTop="@dimen/button_marginTop"
+                android:text="@string/button_register" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
