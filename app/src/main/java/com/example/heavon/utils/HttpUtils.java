@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.heavon.interfaceClasses.Filter;
 import com.example.heavon.interfaceClasses.HttpResponse;
 
 import org.json.JSONObject;
@@ -31,6 +32,26 @@ public class HttpUtils {
         }else{
             Log.e("http error", "Request queue is not init");
         }
+    }
+
+    /**
+     * 获取服务器IP地址
+     * @return 服务器IP地址
+     */
+    public static String getHostIP(){
+        String hostIP = "127.0.0.1";
+
+        return hostIP;
+    }
+
+    /**
+     * 获取服务器后台地址
+     * @return 服务器后台地址
+     */
+    public static String getHost(){
+        String host = "http://192.168.1.101/ad/index.php/Home/";
+
+        return host;
     }
 
     /**
@@ -63,6 +84,7 @@ public class HttpUtils {
      * @return
      */
     public boolean getString(String url, Response.Listener<String> listener) {
+        Log.e("http get", url);
         StringRequest request = new StringRequest(url, listener
                 , new Response.ErrorListener() {
             @Override
@@ -84,6 +106,7 @@ public class HttpUtils {
      */
     public boolean postString(String url, Response.Listener<String> listener, Map<String, String> params) {
         this.mParams = params;
+        Log.e("http post", url + params.toString());
         StringRequest request = new StringRequest(Request.Method.POST, url, listener
                 , new Response.ErrorListener() {
             @Override
