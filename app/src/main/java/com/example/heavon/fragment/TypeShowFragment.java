@@ -43,6 +43,7 @@ public class TypeShowFragment extends Fragment {
     private static final String ARG_TYPE = "type";
     private static final String ARG_PAGE = "page";
 
+    private final int PERPAGE = 4;
     // TODO: Rename and change types of parameters
     private String mType = "电视剧";
     private int mPage = 1;
@@ -129,7 +130,7 @@ public class TypeShowFragment extends Fragment {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);
         Log.e("localization", mType);
-        filter.addFilter("perpage", "4");
+        filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(mPage));
         dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
             @Override
@@ -142,6 +143,9 @@ public class TypeShowFragment extends Fragment {
                     if(showList == null || showList.isEmpty()){
                         Log.e("typeshowfragment", "showlist is null" );
                         return;
+                    }
+                    if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
+                        mShowListView.removeView(mShowNone);
                     }
                     mShowListView.removeView(mShowNone);
                     for(Show show : showList){

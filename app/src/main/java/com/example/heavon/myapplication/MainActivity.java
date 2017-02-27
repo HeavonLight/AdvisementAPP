@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.volley.RequestQueue;
 import com.example.heavon.fragment.MainFragment;
@@ -32,7 +33,6 @@ public class MainActivity extends BasicActivity implements
         MainFragment.OnFragmentInteractionListener,
         PersonFragment.OnFragmentInteractionListener,
         TypeFragment.OnFragmentInteractionListener,
-        SearchFragment.OnFragmentInteractionListener,
         TypeShowFragment.OnFragmentInteractionListener,
         View.OnClickListener{
 
@@ -46,6 +46,7 @@ public class MainActivity extends BasicActivity implements
     private Fragment mCurFragment;
 
     private int mCurPos = 0;
+    private EditText mSearchEdit;
 
 //    private RequestQueue mQueue;
 
@@ -59,6 +60,7 @@ public class MainActivity extends BasicActivity implements
 
     //初始化UI
     public void initUI() {
+        initSearch();
         initIndicator();
         initFragment();
     }
@@ -67,17 +69,14 @@ public class MainActivity extends BasicActivity implements
     public void initFragment() {
         mFragmentManager = getSupportFragmentManager();
 
+        MainFragment mainFragment = new MainFragment();
         TypeFragment typeFragment = new TypeFragment();
         PersonFragment personFragment = new PersonFragment();
-
-        MainFragment mainFragment = new MainFragment();
-        SearchFragment searchFragment = (SearchFragment) mFragmentManager.findFragmentById(R.id.fragment_search);
 
         mFragmentList = new ArrayList<Fragment>();
         mFragmentList.add(mainFragment);
         mFragmentList.add(typeFragment);
         mFragmentList.add(personFragment);
-        mFragmentList.add(searchFragment);
 
         changeIndicator(0);
 //        mFragmentBox = findViewById(R.id.fragment_box);
@@ -100,13 +99,22 @@ public class MainActivity extends BasicActivity implements
 
     //初始化搜索栏
     public void initSearch(){
-
+        mSearchEdit = (EditText) findViewById(R.id.search);
+        mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    enterSearch();
+                    mSearchEdit.clearFocus();
+                }
+            }
+        });
     }
 
     //实现Fragment事件监听
     @Override
     public void onFragmentInteraction(Uri uri) {
-        super.enterSearch();
+
     }
 
     @Override
@@ -135,6 +143,5 @@ public class MainActivity extends BasicActivity implements
         }
 
         mFragmentTransaction.commit();
-
     }
 }

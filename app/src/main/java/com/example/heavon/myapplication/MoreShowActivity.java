@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class MoreShowActivity extends BasicActivity {
 
-    private final String PERPAGE = "2";
+    private final int PERPAGE = 2;
     private String mType = "分类";
     private int mCurPage = 1;
     private List<Show> mShowList;
@@ -48,7 +48,7 @@ public class MoreShowActivity extends BasicActivity {
     private TextView mShowNone;
     private RecyclerView mShowRecyclerView;
     //adapter.
-    MoreShowAdapter mMoreShowAdapter;
+    private MoreShowAdapter mMoreShowAdapter;
     private int lastVisibleItem = 0;
 
 
@@ -155,7 +155,7 @@ public class MoreShowActivity extends BasicActivity {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);
         Log.e("moreShowLocalization", mType);
-        filter.addFilter("perpage", PERPAGE);
+        filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(getCurPage()));
         dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
             @Override
@@ -194,32 +194,36 @@ public class MoreShowActivity extends BasicActivity {
     public void loadMoreShow() {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);
-        filter.addFilter("perpage", PERPAGE);
+        filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(getCurPage() + 1));
         dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
                 if ((Boolean) result.get("error")) {
-                    //error
+                    //失败
                     Toast.makeText(MoreShowActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
                 } else {
+                    //成功
                     List<Show> showList = (List<Show>) result.get("showList");
                     if (showList == null || showList.isEmpty()) {
                         Log.e("moreshowActivity", "showlist is null");
                         mShowListScrollView.setLoadComplete(true);
                         return;
                     } else {
-                        mShowList.addAll(showList);
+                        //判断空状态
                         if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
                             mShowListScrollView.removeView(mShowNone);
 //                            mShowListSwipeView.removeView(mShowNone);
                         }
+                        //添加加载内容
+                        mShowList.addAll(showList);
                         for (Show show : showList) {
                             mMoreShowAdapter.insert(show, mMoreShowAdapter.getAdapterItemCount());
                         }
-                        // add page.
-                        mCurPage++;
-                        // 刷新完成必须调用此方法停止加载
+
+                        //下一页
+                        nextPage();
+                        // 加载完成必须调用此方法停止加载
                         mShowListScrollView.stopLoadMore();
 //                        mShowListSwipeView.setRefreshing(false);
                     }
@@ -237,6 +241,13 @@ public class MoreShowActivity extends BasicActivity {
         int curPage = 1;
 
         return mCurPage;
+    }
+
+    /**
+     * 翻页
+     */
+    private void nextPage() {
+        mCurPage++;
     }
 
     @Override

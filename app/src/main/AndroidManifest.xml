@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
 
     <application
+        android:name="CustomApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -44,7 +45,11 @@
             android:name=".BasicActivity"
             android:label="@string/title_activity_basic" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <activity android:name=".ShowActivity" />
         <activity
             android:name=".UploadActivity"

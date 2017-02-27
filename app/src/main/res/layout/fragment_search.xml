@@ -6,31 +6,71 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/search_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/search"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_search"
-            android:inputType="text"
-            android:textAlignment="center"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp">
 
-        <!--<Button
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search_button"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />-->
+            <LinearLayout
+                android:id="@+id/search_edit_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="2"
+                android:background="@drawable/bg_search_background">
+                <ImageView
+                    android:id="@+id/search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:src="@mipmap/search"/>
 
-    </RelativeLayout>
+                <EditText
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:hint="@string/prompt_search"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:imeOptions="actionSearch"
+                    android:background="@color/transparent"
+                    android:textSize="14sp"/>
+
+                <ImageView
+                    android:id="@+id/search_eidt_cancel"
+                    android:layout_width="@dimen/width_icon"
+                    android:layout_height="@dimen/heigth_icon"
+                    android:layout_marginRight="7dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/clear"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/link_search_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="10"
+                android:text="@string/link_cancel"
+                style="@style/Link"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </FrameLayout>

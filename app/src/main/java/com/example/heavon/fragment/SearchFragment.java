@@ -1,21 +1,34 @@
 package com.example.heavon.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.heavon.myapplication.MainActivity;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.heavon.dao.SearchDao;
+import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.myapplication.R;
-import com.example.heavon.myapplication.SearchActivity;
+import com.example.heavon.vo.Show;
+import com.example.heavon.vo.ShowFilter;
 
-import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +38,7 @@ import java.net.URI;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,9 +49,13 @@ public class SearchFragment extends Fragment {
     private String mParam2;
 
     //UI preference
-    private EditText mSearchView;
+    private EditText mSearchEdit;
+    private ImageView mSearchButton;
+    private ImageView mSearchCancel;
+    private Button mSearchCancelLink;
 
     private OnFragmentInteractionListener mListener;
+    private RequestQueue mQueue;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -75,30 +92,110 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        mQueue = Volley.newRequestQueue(getContext());
 
-        mSearchView = (EditText) view.findViewById(R.id.search);
-        mSearchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mSearchEdit = (EditText) view.findViewById(R.id.search);
+        mSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if(mListener != null){
-                    if(b){
-                        mListener.onFragmentInteraction(null);
-                        mSearchView.clearFocus();
-                    }
-                }else{
-                    Log.d("search_activity","listener null");
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH){
+//                    isSearch = true;
+//                    page = 1;
+//                    MyUtils.hideSoftKeyboard(EnterShopActivity.this,v);
+//                    getData();
+                    search();
+                    return true;
+                }
+                return false;
+            }
+        });
+        mSearchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = editable.toString();
+                if(TextUtils.isEmpty(text)){
+                    //文本框为空
+                    mSearchCancel.setVisibility(View.INVISIBLE);
+                    mListener.onTextChange(true);
+
+                }else {
+                    //文本框文本改动
+                    mSearchCancel.setVisibility(View.VISIBLE);
+                    mListener.onTextChange(false);
                 }
             }
         });
+//        mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if(mListener != null){
+//                    if(b){
+//                        mListener.onFragmentInteraction(null);
+//                        mSearchEdit.clearFocus();
+//                    }
+//                }else{
+//                    Log.d("search_activity","listener null");
+//                }
+//            }
+//        });
+
+        mSearchButton = (ImageView) view.findViewById(R.id.search_button);
+        mSearchButton.setOnClickListener(this);
+        mSearchCancel = (ImageView) view.findViewById(R.id.search_eidt_cancel);
+        mSearchCancel.setOnClickListener(this);
+        mSearchCancelLink = (Button) view.findViewById(R.id.link_search_cancel);
+        mSearchCancelLink.setOnClickListener(this);
+
         // Inflate the layout for this fragment
         return view;
     }
 
-    //进入搜索页面
-//    private void enterSearch() {
-//        Intent intent = new Intent(this, SearchActivity.class);
-//        this.startActivity(intent);
-//    }
+    public void initUI(){
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.search_button:{
+                search();
+            }break;
+            case R.id.search_eidt_cancel:{
+                //取消输入
+                mSearchEdit.setText("");
+            }break;
+            case R.id.link_search_cancel:{
+                //取消搜索
+                mListener.onCancelSearch();
+            }break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 搜索
+     */
+    protected void search(){
+        String keyword = mSearchEdit.getText().toString().trim();
+        //检查参数
+        if(TextUtils.isEmpty(keyword)){
+            Toast.makeText(getContext(), "请输入搜索内容", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //搜索
+        mListener.onShowSearch(keyword);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -108,12 +205,11 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {Log.d("search_activity","attach");
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {                    Log.d("search_activity","listener error");
-
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
@@ -138,5 +234,8 @@ public class SearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void onShowSearch(String keyword);
+        void onCancelSearch();
+        void onTextChange(boolean isEmpty);
     }
 }

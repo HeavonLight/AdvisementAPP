@@ -1,6 +1,7 @@
 package com.example.heavon.dao;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -12,6 +13,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Yadong on 16/3/5.
@@ -110,6 +113,14 @@ public class UserDao extends BaseDao{
         }, params);
     }
 
+    /**
+     * 找回密码
+     * @param user 用户信息
+     * @param verifyCode 验证码
+     * @param passwordConfirm 确认密码
+     * @param queue 网络请求队列
+     * @param response 回调方法
+     */
     public void findPassword(User user, String verifyCode, String passwordConfirm, RequestQueue queue, final HttpResponse<Map<String, Object>> response){
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", user.getUsername());
@@ -143,6 +154,12 @@ public class UserDao extends BaseDao{
                 response.getHttpResponse(returnMap);
             }
         }, params);
+    }
+
+    public boolean checkLogin(){
+
+
+        return false;
     }
 
     /**
@@ -190,8 +207,11 @@ public class UserDao extends BaseDao{
      * @return 是否有效 true或false
      */
     public boolean isTelephone(String phone){
-
-        return false;
+        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+        Matcher m = p.matcher(phone);
+        Log.e("UserDao", m.matches()+"---");
+//        return m.matches();
+        return false;//测试用
     }
     //-------------未完成----------------
     public boolean verifyCode(String code, RequestQueue queue, final HttpResponse<Map<String, Object>> response){

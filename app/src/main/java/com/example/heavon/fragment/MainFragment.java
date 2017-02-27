@@ -45,7 +45,7 @@ public class MainFragment extends Fragment{
     private RollPagerView mRollViewPager;
     private OnFragmentInteractionListener mListener;
 //    private ScrollView mShowsScrollView;
-//    private LinearLayout mShowsView;
+    private LinearLayout mShowsView;
 
     public MainFragment() {
         // Required empty public constructor
@@ -85,20 +85,23 @@ public class MainFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mRollViewPager = (RollPagerView) view.findViewById(R.id.roll_view_pager);
         initRecommand();
-        
 //        mShowsScrollView = (ScrollView) view.findViewById(R.id.lv_shows);
 
-//        mShowsView = (LinearLayout) view.findViewById(R.id.ll_shows);
-        FragmentManager fragmentManager = getFragmentManager();
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.ll_shows, TypeShowFragment.newInstance("电视剧", 1));
-        fragmentTransaction.add(R.id.ll_shows, TypeShowFragment.newInstance("综艺", 1));
-        fragmentTransaction.commit();
-
+        mShowsView = (LinearLayout) view.findViewById(R.id.ll_shows);
+        initTypeShows();
         return view;
     }
-    
+
+    public void initTypeShows(){
+        if(mShowsView.getChildCount() <= 1){
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.ll_shows, TypeShowFragment.newInstance("电视剧", 1));
+            fragmentTransaction.add(R.id.ll_shows, TypeShowFragment.newInstance("综艺", 1));
+            fragmentTransaction.commit();
+        }
+    }
+
     //初始化推荐轮播图
     public void initRecommand(){
         //设置播放时间间隔

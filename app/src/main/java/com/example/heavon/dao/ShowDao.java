@@ -36,16 +36,17 @@ public class ShowDao extends BaseDao {
 
         List<Show> showList = new ArrayList<Show>();
 
-        String getShowsUrl = HttpUtils.getHost() + "Show/getShows";
-//        if(!filter.isEmpty()){
-//            getShowsUrl += filter.parseFilterToURL();
-//        }
-
         if(queue == null){
             Log.e("showDao", "queue is null");
             return ;
         }
+
         HttpUtils http = new HttpUtils(queue);
+        String getShowsUrl = http.getHost() + "Show/getShows";
+//        if(!filter.isEmpty()){
+//            getShowsUrl += filter.parseFilterToURL();
+//        }
+
         http.postString(getShowsUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -53,11 +54,8 @@ public class ShowDao extends BaseDao {
                 JSONObject json;
                 Boolean responseError;
                 try {
-//                    json = new JSONObject(s);
-
                     json = JSON.parseObject(s);Log.e("showshow", "here");
                     responseError = json.getBoolean("error");
-//                    responseError = json.getBoolean("error");
                     returnMap.put("error", responseError);
                     if (responseError) {
                         String msg = json.getString("data");

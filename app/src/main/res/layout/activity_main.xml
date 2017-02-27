@@ -9,52 +9,57 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.heavon.myapplication.MainActivity">
 
-    <!--<RelativeLayout
+    <RelativeLayout
         android:id="@+id/search_box"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <EditText
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_search"
-            android:inputType="text"
-            android:selectAllOnFocus="false"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:textAlignment="center"
+            android:hint="@string/prompt_search_long"
+            android:inputType="text"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:background="@drawable/bg_search_background"/>
 
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search_button"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
-    </RelativeLayout>-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/search_box"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<EditText-->
+            <!--android:id="@+id/search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/prompt_search"-->
+            <!--android:textAlignment="center"-->
+            <!--android:inputType="text"-->
+            <!--android:background="@drawable/bg_search_background"-->
+            <!--android:maxLines="1" />-->
+        <!--&lt;!&ndash;<fragment&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/fragment_search"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:name="com.example.heavon.fragment.SearchFragment"&ndash;&gt;-->
+            <!--&lt;!&ndash;tools:layout="@layout/fragment_search">&ndash;&gt;-->
 
-    <FrameLayout
-        android:id="@+id/search_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <fragment
-            android:id="@+id/fragment_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.example.heavon.fragment.SearchFragment"
-            tools:layout="@layout/fragment_search">
-
-        </fragment>
-    </FrameLayout>
+        <!--&lt;!&ndash;</fragment>&ndash;&gt;-->
+    <!--</FrameLayout>-->
 
     <FrameLayout
         android:id="@+id/fragment_box"
         android:layout_below="@+id/search_box"
         android:layout_above="@+id/indicator_box"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_line_large">
 
     </FrameLayout>
 

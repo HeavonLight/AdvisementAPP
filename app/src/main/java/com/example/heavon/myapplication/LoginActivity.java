@@ -74,6 +74,7 @@ public class LoginActivity extends Activity {
 
     private RequestQueue mQueue;
     private SharedPreferences mSp;
+    private SharedPreferences mLoginSp;
     private DlgUtils mDlgUtils;
 
     // UI references.
@@ -94,6 +95,7 @@ public class LoginActivity extends Activity {
         // Set up the login form.
         mQueue = Volley.newRequestQueue(LoginActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        mLoginSp = this.getSharedPreferences("userLogin", Context.MODE_PRIVATE);
         mDlgUtils = new DlgUtils(this);
 
         //初始化UI
@@ -283,7 +285,7 @@ public class LoginActivity extends Activity {
                         editor.putBoolean("AUTO_ISCHECK", true);
                         editor.putString("USER_NAME", username);
                         editor.putString("PASSWORD", password);
-//                                editor.putString("HASHCODE", hashcode);
+//                        editor.putString("HASH_CODE", hashcode);
                         editor.commit();
 
                         mDlgUtils.closeDlg();

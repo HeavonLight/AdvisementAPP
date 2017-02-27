@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search_after"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.heavon.fragment.SearchAfterFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/show_none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/prompt_show_none"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/show_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+</FrameLayout>
