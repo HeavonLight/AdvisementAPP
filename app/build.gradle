@@ -1,4 +1,21 @@
 apply plugin: 'com.android.application'
+//greenDAO configuration
+apply plugin: 'org.greenrobot.greendao'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+    }
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.example.heavon.gen'
+    targetGenDir 'src/main/java'
+}
 
 android {
     compileSdkVersion 25
@@ -46,23 +63,12 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile files('libs/volley.jar')
     testCompile 'junit:junit:4.12'
-}
 
-//greenDAO configuration
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
-    }
-}
-
-apply plugin: 'org.greenrobot.greendao'
-
-dependencies {
+    //greenDAO
     compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:greendao-generator:3.2.0'
 }
+
 dependencies {
     compile 'com.android.support:support-v4:25.+'
 }

@@ -44,7 +44,7 @@ public class MoreShowActivity extends BasicActivity {
     XRefreshView mShowListScrollView;
 //    SwipeRefreshLayout mShowListSwipeView;
 
-    private RequestQueue mQueue;
+    //    private RequestQueue mQueue;
     private TextView mShowNone;
     private RecyclerView mShowRecyclerView;
     //adapter.
@@ -56,7 +56,7 @@ public class MoreShowActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_show);
-        mQueue = Volley.newRequestQueue(this);
+//        mQueue = Volley.newRequestQueue(this);
 
         initialize();
         initUI();
@@ -157,7 +157,7 @@ public class MoreShowActivity extends BasicActivity {
         Log.e("moreShowLocalization", mType);
         filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(getCurPage()));
-        dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
+        dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
                 if ((Boolean) result.get("error")) {
@@ -196,7 +196,7 @@ public class MoreShowActivity extends BasicActivity {
         ShowFilter filter = new ShowFilter("localization", mType);
         filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(getCurPage() + 1));
-        dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
+        dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
                 if ((Boolean) result.get("error")) {

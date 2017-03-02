@@ -17,11 +17,18 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.heavon.adapter.HistoryAdapter;
+import com.example.heavon.adapter.HotAdapter;
 import com.example.heavon.adapter.MoreShowAdapter;
 import com.example.heavon.dao.SearchDao;
+import com.example.heavon.dao.UserDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.myapplication.R;
+import com.example.heavon.vo.Search;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -47,13 +54,16 @@ public class SearchBeforeFragment extends Fragment {
     // UI preference.
     private RecyclerView mSearchHistoryListView;
     private RecyclerView mSearchHotListView;
-    private RequestQueue mQueue;
-    private List<String> mHistoryList;
+    //    private RequestQueue mQueue;
+    private List<Search> mHistoryList;
+    private List<Search> mHotList;
     private LinearLayout mSearchHistoryView;
     private LinearLayout mSearchHotView;
 
     //适配器
     private HistoryAdapter mHistoryAdapter;
+    private HotAdapter mHotAdapter;
+    private View mSearchHistoryClear;
 
     public SearchBeforeFragment() {
         // Required empty public constructor
@@ -91,61 +101,184 @@ public class SearchBeforeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_before, container, false);
-        mQueue = Volley.newRequestQueue(getContext());
+//        mQueue = Volley.newRequestQueue(getContext());
 
         mSearchHistoryView = (LinearLayout) view.findViewById(R.id.search_history);
         mSearchHotView = (LinearLayout) view.findViewById(R.id.search_hot);
 
+        mSearchHistoryClear = view.findViewById(R.id.search_clear);
+        mSearchHistoryClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearSearchHistory();
+            }
+        });
         // 搜索历史列表
         mSearchHistoryListView = (RecyclerView) view.findViewById(R.id.search_history_view);
         mSearchHistoryListView.setHasFixedSize(true);
         final LinearLayoutManager historyLayoutManger = new LinearLayoutManager(getContext());
         historyLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
         mSearchHistoryListView.setLayoutManager(historyLayoutManger);
+        mHistoryList = new ArrayList<>();
+        mHistoryAdapter = new HistoryAdapter(mHistoryList, getContext());
+        mSearchHistoryListView.setAdapter(mHistoryAdapter);
 
+        initSearchHistory();
         //热搜榜
         mSearchHotListView = (RecyclerView) view.findViewById(R.id.search_hot_view);
         mSearchHotListView.setHasFixedSize(true);
         final GridLayoutManager hotLayoutManager = new GridLayoutManager(getContext(), 2);
         mSearchHotListView.setLayoutManager(hotLayoutManager);
 
+        initSearchHot();
         return view;
     }
 
-    public void initSearchHistory(){
-        SearchDao searchDao = new SearchDao();
-        searchDao.initSearchHistory(getContext(), mQueue, new HttpResponse<Map<String, Object>>() {
+    /**
+     * 初始化搜索历史
+     */
+    public void initSearchHistory() {
+        final SearchDao searchDao = new SearchDao();
+        //检查登录状态
+        if (!(new UserDao().checkLogin(getContext()))) {
+            //显示本地搜索历史
+            List<Search> historyList = searchDao.getSearchHistory();
+            Log.e("searchLocalHistory", historyList.toString());
+            mHistoryList.clear();
+            mHistoryList.addAll(historyList);
+            refreshHistory();
+            return;
+        }
+        //初始化搜索历史
+        searchDao.initSearchHistory(new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean) result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //失败
-                    Toast.makeText(getContext(), (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                    mSearchHistoryView.setVisibility(View.INVISIBLE);
-                }else {
+                    Log.e("searchKey", result.toString());
+                    if (!result.containsKey("isLogined")) {
+                        Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                    }
+                    //显示本地搜索历史
+                    List<Search> historyList = searchDao.getSearchHistory();
+                    Log.e("searchLocalHistory", historyList.toString());
+                    mHistoryList.clear();
+                    mHistoryList.addAll(historyList);
+                } else {
                     //成功
-                    List<String> historyList = (List<String>) result.get("historyList");
-                    if(historyList == null || historyList.isEmpty()){
-                        Log.e("searchBeforeFragment", "history is null" );
-                        mSearchHistoryView.setVisibility(View.INVISIBLE);
+                    List<Search> historyList = (List<Search>) result.get("historyList");
+                    mHistoryList.clear();
+                    mHistoryList.addAll(historyList);
+                }
+                refreshHistory();
+            }
+        });
+    }
+
+     /**
+     * 清空搜索历史记录
+     */
+    public void clearSearchHistory() {
+        final SearchDao searchDao = new SearchDao();
+        //检查登录状态
+        if (!(new UserDao().checkLogin(getContext()))) {
+            //清空本地搜索历史
+            searchDao.clearSearchHistory();
+            //更新搜索历史记录
+            initSearchHistory();
+            return;
+        }
+
+        //清空历史记录
+        searchDao.clearSearchHistory(new HttpResponse<Map<String, Object>>() {
+            @Override
+            public void getHttpResponse(Map<String, Object> result) {
+                if ((Boolean) result.get("error")) {
+                    //失败
+                    if (!result.containsKey("isLogined")) {
+                        Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //成功
+                    Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                }
+                //更新搜索历史记录
+                initSearchHistory();
+            }
+        });
+    }
+
+    //刷新搜索历史记录
+    private void refreshHistory() {
+        if (null == mHistoryList || mHistoryList.isEmpty()) {
+            Log.e("searchBeforeFragment", "history is null");
+            mSearchHistoryView.setVisibility(View.INVISIBLE);
+        } else {
+            mSearchHistoryView.setVisibility(View.VISIBLE);
+        }
+        if (null != mHistoryAdapter) {
+            Log.e("searchBeforeFragment", "history update " + mHistoryList.toString());
+            mHistoryAdapter.notifyDataSetChanged();
+        }
+    }
+
+//    //显示搜索历史记录
+//    private void showHistory(List<Search> historyList) {
+//        if (historyList == null || historyList.isEmpty()) {
+//            Log.e("searchBeforeFragment", "history is null");
+////            mSearchHistoryView.setVisibility(View.INVISIBLE);
+//            return;
+//        }
+//
+//        mHistoryList = historyList;
+//        //显示搜索历史
+//        mSearchHistoryView.setVisibility(View.VISIBLE);
+////                    if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
+////                        mShowNone.setVisibility(View.INVISIBLE);
+////                    }
+//
+//    }
+
+    /**
+     * 初始化热搜榜
+     */
+    public void initSearchHot() {
+        SearchDao searchDao = new SearchDao();
+        searchDao.initSearchHot(new HttpResponse<Map<String, Object>>() {
+            @Override
+            public void getHttpResponse(Map<String, Object> result) {
+                if ((Boolean) result.get("error")) {
+                    //失败
+                    Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                    mSearchHotView.setVisibility(View.INVISIBLE);
+                } else {
+                    //成功
+                    List<Search> hotList = (List<Search>) result.get("hotList");
+                    if (hotList == null || hotList.isEmpty()) {
+                        Log.e("searchBeforeFragment", "hot is null");
+                        mSearchHotView.setVisibility(View.INVISIBLE);
                         return;
                     }
 
-                    mHistoryList = historyList;
-                    //显示搜索历史
-                    mSearchHistoryView.setVisibility(View.VISIBLE);
+                    mHotList = hotList;
+                    //显示热搜榜
+                    mSearchHotView.setVisibility(View.VISIBLE);
 //                    if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
 //                        mShowNone.setVisibility(View.INVISIBLE);
 //                    }
 
-                    mHistoryAdapter = new HistoryAdapter(historyList, getContext());
-                    mSearchHistoryListView.setAdapter(mHistoryAdapter);
+                    mHotAdapter = new HotAdapter(mHotList, getContext());
+                    mSearchHotListView.setAdapter(mHotAdapter);
                 }
             }
         });
     }
 
-    public void initSearchHot(){
-
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        initSearchHistory();
+        initSearchHot();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

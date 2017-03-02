@@ -19,11 +19,14 @@ import com.android.volley.toolbox.Volley;
 import com.example.heavon.adapter.MoreShowAdapter;
 import com.example.heavon.dao.SearchDao;
 import com.example.heavon.dao.ShowDao;
+import com.example.heavon.dao.UserDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.myapplication.MoreShowActivity;
 import com.example.heavon.myapplication.R;
+import com.example.heavon.vo.Search;
 import com.example.heavon.vo.Show;
 import com.example.heavon.vo.ShowFilter;
+import com.example.heavon.vo.User;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -54,7 +57,7 @@ public class SearchAfterFragment extends Fragment {
     private TextView mShowNone;
     private XRecyclerView mShowListView;
     private MoreShowAdapter mMoreShowAdapter;
-    private RequestQueue mQueue;
+//    private RequestQueue mQueue;
 
     public SearchAfterFragment() {
         // Required empty public constructor
@@ -65,7 +68,7 @@ public class SearchAfterFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param keyword Parameter 1.
-     * @param page Parameter 2.
+     * @param page    Parameter 2.
      * @return A new instance of fragment SearchAfterFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -92,7 +95,7 @@ public class SearchAfterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_after, container, false);
-        mQueue = Volley.newRequestQueue(getContext());
+//        mQueue = Volley.newRequestQueue(getContext());
 
         mShowNone = (TextView) view.findViewById(R.id.show_none);
         //搜索结果列表
@@ -129,17 +132,17 @@ public class SearchAfterFragment extends Fragment {
         ShowFilter filter = new ShowFilter("keyword", mKeyword);
         filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(mPage));
-        searchDao.searchShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
+        searchDao.searchShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean) result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //失败
-                    Toast.makeText(getContext(), (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                }else {
+                    Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
                     //成功
                     List<Show> showList = (List<Show>) result.get("showList");
-                    if(showList == null || showList.isEmpty()){
-                        Log.e("searchAfterFragment", "showlist is null" );
+                    if (showList == null || showList.isEmpty()) {
+                        Log.e("searchAfterFragment", "showlist is null");
                         return;
                     }
                     mShowList = showList;
@@ -155,7 +158,11 @@ public class SearchAfterFragment extends Fragment {
                 mShowListView.refreshComplete();
             }
         });
-        //保存搜索记录
+        //保存本地搜索历史
+        if (!(new UserDao().checkLogin(getContext()))) {
+            searchDao.addSearchHistory(mKeyword);
+            Log.e("searchAfterFragment", "local history search add.");
+        }
     }
 
     /**
@@ -166,18 +173,18 @@ public class SearchAfterFragment extends Fragment {
         ShowFilter filter = new ShowFilter("keyword", mKeyword);
         filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(getCurPage() + 1));
-        searchDao.searchShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
+        searchDao.searchShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean) result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //失败
-                    Toast.makeText(getContext(), (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                }else {
+                    Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
                     //成功
                     List<Show> showList = (List<Show>) result.get("showList");
-                    if(showList == null || showList.isEmpty()){
-                        Log.e("searchAfterFragment", "showlist is null" );
-                    }else{
+                    if (showList == null || showList.isEmpty()) {
+                        Log.e("searchAfterFragment", "showlist is null");
+                    } else {
                         //判断空状态
                         if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
                             mShowNone.setVisibility(View.INVISIBLE);

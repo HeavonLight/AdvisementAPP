@@ -5,7 +5,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.heavon.myapplication.CustomApplication;
+import com.example.heavon.myapplication.App;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +31,7 @@ public class SessionJsonRequest extends JsonObjectRequest {
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         // 检查本地是否有session.如果没哦有，就将header中的session数据保存到本地
-        CustomApplication.newInstance().checkSessionCookie(response.headers);
+        App.newInstance().checkSessionCookie(response.headers);
 
         JSONObject jb =null;
         try {
@@ -54,7 +54,7 @@ public class SessionJsonRequest extends JsonObjectRequest {
             headers = new HashMap<String, String>();
         }
 
-        CustomApplication.newInstance().addSessionCookie(headers);
+        App.newInstance().addSessionCookie(headers);
 
         return headers;
     }

@@ -38,7 +38,7 @@ import java.util.Map;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment implements View.OnClickListener{
+public class SearchFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,7 +55,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private Button mSearchCancelLink;
 
     private OnFragmentInteractionListener mListener;
-    private RequestQueue mQueue;
+//    private RequestQueue mQueue;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -92,17 +92,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        mQueue = Volley.newRequestQueue(getContext());
+//        mQueue = Volley.newRequestQueue(getContext());
 
         mSearchEdit = (EditText) view.findViewById(R.id.search);
         mSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_SEARCH){
-//                    isSearch = true;
-//                    page = 1;
-//                    MyUtils.hideSoftKeyboard(EnterShopActivity.this,v);
-//                    getData();
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
                     search();
                     return true;
                 }
@@ -123,12 +119,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = editable.toString();
-                if(TextUtils.isEmpty(text)){
+                if (TextUtils.isEmpty(text)) {
                     //文本框为空
                     mSearchCancel.setVisibility(View.INVISIBLE);
                     mListener.onTextChange(true);
 
-                }else {
+                } else {
                     //文本框文本改动
                     mSearchCancel.setVisibility(View.VISIBLE);
                     mListener.onTextChange(false);
@@ -160,24 +156,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    public void initUI(){
+    public void initUI() {
 
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.search_button:{
+        switch (view.getId()) {
+            case R.id.search_button: {
+                //搜索
                 search();
-            }break;
-            case R.id.search_eidt_cancel:{
+            }
+            break;
+            case R.id.search_eidt_cancel: {
                 //取消输入
                 mSearchEdit.setText("");
-            }break;
-            case R.id.link_search_cancel:{
+            }
+            break;
+            case R.id.link_search_cancel: {
                 //取消搜索
                 mListener.onCancelSearch();
-            }break;
+            }
+            break;
             default:
                 break;
         }
@@ -186,10 +186,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     /**
      * 搜索
      */
-    protected void search(){
+    protected void search() {
         String keyword = mSearchEdit.getText().toString().trim();
         //检查参数
-        if(TextUtils.isEmpty(keyword)){
+        if (TextUtils.isEmpty(keyword)) {
             Toast.makeText(getContext(), "请输入搜索内容", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -234,8 +234,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
         void onShowSearch(String keyword);
+
         void onCancelSearch();
+
         void onTextChange(boolean isEmpty);
     }
 }

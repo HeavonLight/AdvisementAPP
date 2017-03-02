@@ -72,7 +72,7 @@ public class LoginActivity extends Activity {
      */
 //    private UserLoginTask mAuthTask = null;
 
-    private RequestQueue mQueue;
+//    private RequestQueue mQueue;
     private SharedPreferences mSp;
     private SharedPreferences mLoginSp;
     private DlgUtils mDlgUtils;
@@ -93,7 +93,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mQueue = Volley.newRequestQueue(LoginActivity.this);
+//        mQueue = Volley.newRequestQueue(LoginActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         mLoginSp = this.getSharedPreferences("userLogin", Context.MODE_PRIVATE);
         mDlgUtils = new DlgUtils(this);
@@ -103,7 +103,7 @@ public class LoginActivity extends Activity {
     }
 
     //初始化UI
-    public void initUI(){
+    public void initUI() {
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
 //        populateAutoComplete();
 
@@ -156,18 +156,21 @@ public class LoginActivity extends Activity {
         //初始化正在登录框
         mDlgUtils.initDlg(R.style.loginingDlg, R.layout.logining_dlg);
     }
+
     //进入到注册页面
-    public void enterRegister(){
+    public void enterRegister() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         LoginActivity.this.startActivity(intent);
     }
+
     //进入到忘记密码页面
-    public void enterFindPassword(){
+    public void enterFindPassword() {
         Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
         LoginActivity.this.startActivity(intent);
     }
+
     //跳转到主页面
-    public void gotoMain(){
+    public void gotoMain() {
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
         this.finish();
@@ -268,17 +271,17 @@ public class LoginActivity extends Activity {
             //正在登录
             mDlgUtils.showDlg();
 
-            userDao.login(username, password, mQueue, new HttpResponse<Map<String, Object>>() {
+            userDao.login(username, password, new HttpResponse<Map<String, Object>>() {
                 @Override
                 public void getHttpResponse(Map<String, Object> result) {
-                    if((Boolean)result.get("error")){
+                    if ((Boolean) result.get("error")) {
                         //登录失败
                         mDlgUtils.closeDlg();
-                        Toast.makeText(LoginActivity.this, (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                    }else{
+                        Toast.makeText(LoginActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                    } else {
                         int uid = (int) result.get("uid");
 //                                String hashcode = result.get("hashcode").toString();
-                        Log.i("login", String.valueOf(uid)+" login!");
+                        Log.i("login", String.valueOf(uid) + " login!");
                         //登录成功保存登录信息
                         SharedPreferences.Editor editor = mSp.edit();
                         editor.putInt("USER_ID", uid);

@@ -5,7 +5,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.example.heavon.myapplication.CustomApplication;
+import com.example.heavon.myapplication.App;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
@@ -46,7 +46,7 @@ public class SessionStringRequest extends Request<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response)
     {
-        CustomApplication.newInstance().checkSessionCookie(response.headers);
+        App.newInstance().checkSessionCookie(response.headers);
         String parsed;
         try
         {
@@ -73,7 +73,7 @@ public class SessionStringRequest extends Request<String> {
             headers = new HashMap<String, String>();
         }
 
-        CustomApplication.newInstance().addSessionCookie(headers);
+        App.newInstance().addSessionCookie(headers);
 
         return headers;
     }

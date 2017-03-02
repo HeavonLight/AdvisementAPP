@@ -18,6 +18,7 @@
     <dimen name="margin_line_large">20dp</dimen>
     <dimen name="width_icon">16dp</dimen>
     <dimen name="heigth_icon">16dp</dimen>
+
     <dimen name="margin_body">16dp</dimen>
     <dimen name="padding_body">16dp</dimen>
 

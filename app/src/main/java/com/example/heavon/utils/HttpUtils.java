@@ -5,7 +5,7 @@ import android.util.Log;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.example.heavon.myapplication.CustomApplication;
+import com.example.heavon.myapplication.App;
 import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.request.SessionJsonRequest;
 import com.example.heavon.request.SessionStringRequest;
@@ -24,7 +24,7 @@ public class HttpUtils {
     private JSONObject mJsonParams;
 
     public HttpUtils() {
-        mQuene = CustomApplication.newInstance().getRequestQueue();
+        mQuene = App.newInstance().getRequestQueue();
         if(mQuene == null){
             Log.e("http error", "Request queue is not init");
         }
@@ -34,7 +34,7 @@ public class HttpUtils {
         if(queue != null){
             mQuene = queue;
         }else{
-            mQuene = CustomApplication.newInstance().getRequestQueue();
+            mQuene = App.newInstance().getRequestQueue();
             Log.e("http error", "queue is null. auto apply App queue.");
         }
     }
@@ -44,7 +44,7 @@ public class HttpUtils {
      * @return 服务器IP地址
      */
     public static String getHostIP(){
-        String hostIP = "192.168.1.101";
+        String hostIP = "114.115.203.30";
 
         return hostIP;
     }
@@ -54,7 +54,7 @@ public class HttpUtils {
      * @return 服务器后台地址
      */
     public static String getHost(){
-        String host = "http://192.168.1.101/ad/index.php/Home/";
+        String host = "http://114.115.203.30/ad/index.php/Home/";
 
         return host;
     }

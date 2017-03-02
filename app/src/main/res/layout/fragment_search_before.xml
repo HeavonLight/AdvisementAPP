@@ -8,31 +8,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/padding_body"
+        android:paddingRight="@dimen/padding_body"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/search_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:visibility="invisible"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    style="@style/Text.Search"
                     android:text="@string/search_history"/>
 
                 <LinearLayout
-                    android:id="@+id/search_empty"
+                    android:id="@+id/search_clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -51,6 +51,7 @@
             <LinearLayout
                 android:id="@+id/search_history_box"
                 android:orientation="vertical"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -65,7 +66,6 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/search_history_view"
-                    android:layout_marginTop="@dimen/margin_line_normal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="none">
@@ -87,14 +87,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_line_normal"
-                android:textColor="@color/black"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="8dp"
+                style="@style/Text.Search"
                 android:text="@string/search_hot"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line"
-                android:layout_marginTop="6dp"
                 android:background="@color/colorSearchBackground">
             </View>
 
@@ -109,7 +109,6 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/search_hot_view"
-                android:layout_marginTop="@dimen/margin_line_normal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none">

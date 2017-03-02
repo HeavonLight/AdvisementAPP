@@ -1,6 +1,7 @@
 package com.example.heavon.myapplication;
 
 //import android.app.Fragment;
+
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -34,7 +35,7 @@ public class MainActivity extends BasicActivity implements
         PersonFragment.OnFragmentInteractionListener,
         TypeFragment.OnFragmentInteractionListener,
         TypeShowFragment.OnFragmentInteractionListener,
-        View.OnClickListener{
+        View.OnClickListener {
 
     private Button mIndicatorMain;
     private Button mIndicatorType;
@@ -98,12 +99,12 @@ public class MainActivity extends BasicActivity implements
     }
 
     //初始化搜索栏
-    public void initSearch(){
+    public void initSearch() {
         mSearchEdit = (EditText) findViewById(R.id.search);
         mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
+                if (b) {
                     enterSearch();
                     mSearchEdit.clearFocus();
                 }
@@ -117,28 +118,34 @@ public class MainActivity extends BasicActivity implements
 
     }
 
+    //退出登录
+    @Override
+    public void logout() {
+        gotoLogin();
+    }
+
     @Override
     public void onClick(View view) {
         changeIndicator((Integer) view.getTag());
     }
 
-    private void changeIndicator(int index){
+    private void changeIndicator(int index) {
         mCurPos = index;
         mFragmentTransaction = mFragmentManager.beginTransaction();
 
-        if(null != mCurFragment){
+        if (null != mCurFragment) {
             mFragmentTransaction.hide(mCurFragment);
         }
 
         Fragment fragment = mFragmentManager.findFragmentByTag(mFragmentList.get(mCurPos).getClass().getName());
-        if(null == fragment){
+        if (null == fragment) {
             fragment = mFragmentList.get(index);
         }
         mCurFragment = fragment;
 
-        if(!fragment.isAdded()){
+        if (!fragment.isAdded()) {
             mFragmentTransaction.add(R.id.fragment_box, fragment, fragment.getClass().getName());
-        }else{
+        } else {
             mFragmentTransaction.show(fragment);
         }
 

@@ -27,7 +27,7 @@ import cn.smssdk.SMSSDK;
 
 public class FindPasswordActivity extends BasicActivity {
 
-    private RequestQueue mQueue;
+    //    private RequestQueue mQueue;
     private SharedPreferences mSp;
 
     private DlgUtils mDlgUtils;
@@ -49,12 +49,12 @@ public class FindPasswordActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_password);
 
-        mQueue = Volley.newRequestQueue(FindPasswordActivity.this);
+//        mQueue = Volley.newRequestQueue(FindPasswordActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         mDlgUtils = new DlgUtils(this);
 
         //        注册验证码事件
-        EventHandler eh=new EventHandler(){
+        EventHandler eh = new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
                 Message msg = new Message();
@@ -71,7 +71,7 @@ public class FindPasswordActivity extends BasicActivity {
     }
 
     //初始化UI
-    public void initUI(){
+    public void initUI() {
         mUsernameView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mVerifyView = (EditText) findViewById(R.id.verify);
@@ -91,13 +91,13 @@ public class FindPasswordActivity extends BasicActivity {
             public void onClick(View view) {
                 //检查电话号码是否正确
                 final String username = mUsernameView.getText().toString();
-                if(checkUsername(username)){
+                if (checkUsername(username)) {
                     //发送验证码
-                    SMSSDK.getVerificationCode("86",username);
+                    SMSSDK.getVerificationCode("86", username);
                     mVerifyView.requestFocus();
                     mButtonVerify.setClickable(false);
                     handlerText.sendEmptyMessage(Constant.MESSAGE_VERIFY_COUNTDOWN);//开始倒计时
-                }else{
+                } else {
                     mUsernameView.requestFocus();
                 }
             }
@@ -109,7 +109,7 @@ public class FindPasswordActivity extends BasicActivity {
     }
 
     //检查验证码
-    public boolean checkVerifyCode(String verifycode){
+    public boolean checkVerifyCode(String verifycode) {
         boolean cancel = false;
         View focusView = null;
 
@@ -125,17 +125,18 @@ public class FindPasswordActivity extends BasicActivity {
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     //检查用户名
-    public boolean checkUsername(String username){
+    public boolean checkUsername(String username) {
         boolean cancel = false;
         View focusView = null;
 
@@ -151,48 +152,49 @@ public class FindPasswordActivity extends BasicActivity {
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     //检查密码
-    public boolean checkPassword(String password, String passwordConfirm){
+    public boolean checkPassword(String password, String passwordConfirm) {
         boolean cancel = false;
         View focusView = null;
 
         UserDao userDao = new UserDao();
         // Check for a valid password, if the user entered one.
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        }else if(!userDao.isPasswordValid(password)){
+        } else if (!userDao.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        }else if(!password.equals(passwordConfirm)){
+        } else if (!password.equals(passwordConfirm)) {
             mPasswordView.setError(getString(R.string.error_inconsistent_password));
             focusView = mPasswordConfirmView;
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     //尝试找回密码
-    public void attemptFindPassword(){
+    public void attemptFindPassword() {
 
         // Reset errors.
         mUsernameView.setError(null);
@@ -204,7 +206,7 @@ public class FindPasswordActivity extends BasicActivity {
         final String passwordConfirm = mPasswordConfirmView.getText().toString();
         final String verifycode = mVerifyView.getText().toString();
 
-        if(checkUsername(username) && checkVerifyCode(verifycode) && checkPassword(password, passwordConfirm)){
+        if (checkUsername(username) && checkVerifyCode(verifycode) && checkPassword(password, passwordConfirm)) {
             mDlgUtils.showDlg();//正在找回密码
             //验证码校对
             flag = false;
@@ -212,28 +214,30 @@ public class FindPasswordActivity extends BasicActivity {
         }
     }
 
-    Handler handlerText =new Handler(){
+    Handler handlerText = new Handler() {
         public void handleMessage(Message msg) {
-            if(msg.what== Constant.MESSAGE_VERIFY_COUNTDOWN){
-                if(time>0){
+            if (msg.what == Constant.MESSAGE_VERIFY_COUNTDOWN) {
+                if (time > 0) {
                     mButtonVerify.setText(time + "秒");
                     time--;
                     handlerText.sendEmptyMessageDelayed(Constant.MESSAGE_VERIFY_COUNTDOWN, 1000);
-                }else{
+                } else {
                     time = 60;
                     mButtonVerify.setText(R.string.link_verify_short);
                     mButtonVerify.setClickable(true);
                 }
-            }else{
+            } else {
                 mVerifyView.setText("");
                 time = 60;
                 mButtonVerify.setText(R.string.link_verify_short);
                 mButtonVerify.setClickable(true);
             }
-        };
+        }
+
+        ;
     };
 
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -241,25 +245,25 @@ public class FindPasswordActivity extends BasicActivity {
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;
-            Log.e("event", "event="+event);
+            Log.e("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //短信注册成功后，返回MainActivity,然后提示新好友
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功,验证通过
 //                    Toast.makeText(getApplicationContext(), "验证码校验成功", Toast.LENGTH_SHORT).show();
                     findPassword();
                     handlerText.sendEmptyMessage(Constant.MESSAGE_VERIFY_SUCCESS);
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){//服务器验证码发送成功
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {//服务器验证码发送成功
                     Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){//返回支持发送验证码的国家列表
+                } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {//返回支持发送验证码的国家列表
                     Toast.makeText(getApplicationContext(), "获取国家列表成功", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                if(flag){
+                if (flag) {
                     mButtonVerify.setText(R.string.link_verify_short);
                     mButtonVerify.setClickable(true);
                     Toast.makeText(FindPasswordActivity.this, "验证码获取失败，请重新获取", Toast.LENGTH_SHORT).show();
                     mUsernameView.requestFocus();
-                }else{
+                } else {
                     ((Throwable) data).printStackTrace();
 //                    int resId = getStringRes(RegisterActivity.this, "smssdk_network_error");
                     mDlgUtils.closeDlg();
@@ -284,17 +288,17 @@ public class FindPasswordActivity extends BasicActivity {
 
         //发送请求
         UserDao userDao = new UserDao();
-        userDao.findPassword(new User(username, password), verifycode, passwordCofirm, mQueue, new HttpResponse<Map<String, Object>>() {
+        userDao.findPassword(new User(username, password), verifycode, passwordCofirm, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean)result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //找回密码失败
                     mDlgUtils.closeDlg();
-                    Toast.makeText(FindPasswordActivity.this, (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(FindPasswordActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
 //                    String uid = (int) result.get("uid");
 //                                String hashcode = result.get("hashcode").toString();
-                    Log.i("find_password", password+" password!");
+                    Log.i("find_password", password + " password!");
 
                     mDlgUtils.closeDlg();
                     Toast.makeText(FindPasswordActivity.this, "找回密码成功", Toast.LENGTH_SHORT).show();

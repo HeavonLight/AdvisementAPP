@@ -18,7 +18,8 @@ import java.util.Map;
 public class WelcomeActivity extends BasicActivity {
 
     SharedPreferences mSp;
-    RequestQueue mQueue;
+
+    //    RequestQueue mQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,25 +28,25 @@ public class WelcomeActivity extends BasicActivity {
         //初始化配置
 
         //判断登录状态
-        mQueue = Volley.newRequestQueue(WelcomeActivity.this);
+//        mQueue = Volley.newRequestQueue(WelcomeActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         final Boolean autoLogin = mSp.getBoolean("AUTO_ISCHECK", false);
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if(autoLogin){
+                if (autoLogin) {
                     UserDao dao = new UserDao();
                     String username = mSp.getString("USER_NAME", "");
                     String password = mSp.getString("PASSWORD", "");
-                    dao.login(username, password, mQueue, new HttpResponse<Map<String, Object>>() {
+                    dao.login(username, password, new HttpResponse<Map<String, Object>>() {
                         @Override
                         public void getHttpResponse(Map<String, Object> result) {
-                            if((Boolean)result.get("error")){
+                            if ((Boolean) result.get("error")) {
                                 gotoLogin();
-                            }else{
+                            } else {
                                 int uid = (int) result.get("uid");
 //                                String hashcode = result.get("hashcode").toString();
-                                Log.i("login", String.valueOf(uid)+" login!");
+                                Log.i("login", String.valueOf(uid) + " login!");
                                 //登录成功保存登录信息
                                 SharedPreferences.Editor editor = mSp.edit();
                                 editor.putInt("USER_ID", uid);
@@ -58,7 +59,7 @@ public class WelcomeActivity extends BasicActivity {
                         }
                     });
 
-                }else{
+                } else {
                     //跳转到登录页面
                     gotoLogin();
                 }

@@ -1,14 +1,21 @@
 package com.example.heavon.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.heavon.dao.UserDao;
+import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.myapplication.R;
+
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +36,7 @@ public class PersonFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private TextView mLogoutView;
 
     public PersonFragment() {
         // Required empty public constructor
@@ -65,7 +73,30 @@ public class PersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person, container, false);
+        View view = inflater.inflate(R.layout.fragment_person, container, false);
+
+        mLogoutView = (TextView) view.findViewById(R.id.person_logout);
+        mLogoutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserDao userDao = new UserDao();
+                userDao.logout(new HttpResponse<Map<String, Object>>() {
+                    @Override
+                    public void getHttpResponse(Map<String, Object> result) {
+                        String msg = (String) result.get("msg");
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        if (mListener != null) {
+                            //清空本地登录
+                            SharedPreferences sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                            sp.edit().clear().commit();
+                            mListener.logout();
+                        }
+                    }
+                });
+
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,5 +136,7 @@ public class PersonFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
+        void logout();
     }
 }

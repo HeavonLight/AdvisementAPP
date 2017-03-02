@@ -35,9 +35,9 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
 
-public class RegisterActivity extends BasicActivity{
+public class RegisterActivity extends BasicActivity {
 
-    private RequestQueue mQueue;
+    //    private RequestQueue mQueue;
     private SharedPreferences mSp;
 
     private DlgUtils mDlgUtils;
@@ -59,12 +59,12 @@ public class RegisterActivity extends BasicActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mQueue = Volley.newRequestQueue(RegisterActivity.this);
+//        mQueue = Volley.newRequestQueue(RegisterActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         mDlgUtils = new DlgUtils(this);
 
 //        注册验证码事件
-        EventHandler eh=new EventHandler(){
+        EventHandler eh = new EventHandler() {
             @Override
             public void afterEvent(int event, int result, Object data) {
                 Message msg = new Message();
@@ -79,8 +79,9 @@ public class RegisterActivity extends BasicActivity{
         //初始化UI
         initUI();
     }
+
     //初始化UI
-    public void initUI(){
+    public void initUI() {
         mUsernameView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mVerifyView = (EditText) findViewById(R.id.verify);
@@ -99,13 +100,13 @@ public class RegisterActivity extends BasicActivity{
             public void onClick(View view) {
                 //检查电话号码是否正确
                 final String username = mUsernameView.getText().toString();
-                if(checkUsername(username)){
+                if (checkUsername(username)) {
                     //发送验证码
-                    SMSSDK.getVerificationCode("86",username);
+                    SMSSDK.getVerificationCode("86", username);
                     mVerifyView.requestFocus();
                     mButtonVerify.setClickable(false);
                     handlerText.sendEmptyMessage(Constant.MESSAGE_VERIFY_COUNTDOWN);//开始倒计时
-                }else{
+                } else {
                     mUsernameView.requestFocus();
                 }
             }
@@ -117,7 +118,7 @@ public class RegisterActivity extends BasicActivity{
     }
 
     //检查验证码
-    public boolean checkVerifyCode(String verifycode){
+    public boolean checkVerifyCode(String verifycode) {
         boolean cancel = false;
         View focusView = null;
 
@@ -133,17 +134,18 @@ public class RegisterActivity extends BasicActivity{
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     //检查用户名
-    public boolean checkUsername(String username){
+    public boolean checkUsername(String username) {
         boolean cancel = false;
         View focusView = null;
 
@@ -159,17 +161,18 @@ public class RegisterActivity extends BasicActivity{
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     //检查密码
-    public boolean checkPassword(String password){
+    public boolean checkPassword(String password) {
         boolean cancel = false;
         View focusView = null;
 
@@ -181,17 +184,18 @@ public class RegisterActivity extends BasicActivity{
             cancel = true;
         }
 
-        if(cancel){
+        if (cancel) {
             // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
             return false;
-        }else{
+        } else {
             return true;
         }
     }
+
     //尝试注册
-    public void attemptRegister(){
+    public void attemptRegister() {
 
         // Reset errors.
         mUsernameView.setError(null);
@@ -202,7 +206,7 @@ public class RegisterActivity extends BasicActivity{
         final String password = mPasswordView.getText().toString();
         final String verifycode = mVerifyView.getText().toString();
 
-        if(checkUsername(username) && checkVerifyCode(verifycode) && checkPassword(password)){
+        if (checkUsername(username) && checkVerifyCode(verifycode) && checkPassword(password)) {
             mDlgUtils.showDlg();//正在注册
             //验证码校对
             flag = false;
@@ -210,28 +214,30 @@ public class RegisterActivity extends BasicActivity{
         }
     }
 
-    Handler handlerText =new Handler(){
+    Handler handlerText = new Handler() {
         public void handleMessage(Message msg) {
-            if(msg.what== Constant.MESSAGE_VERIFY_COUNTDOWN){
-                if(time>0){
+            if (msg.what == Constant.MESSAGE_VERIFY_COUNTDOWN) {
+                if (time > 0) {
                     mButtonVerify.setText(time + "秒");
                     time--;
                     handlerText.sendEmptyMessageDelayed(Constant.MESSAGE_VERIFY_COUNTDOWN, 1000);
-                }else{
+                } else {
                     time = 60;
                     mButtonVerify.setText(R.string.link_verify_short);
                     mButtonVerify.setClickable(true);
                 }
-            }else{
+            } else {
                 mVerifyView.setText("");
                 time = 60;
                 mButtonVerify.setText(R.string.link_verify_short);
                 mButtonVerify.setClickable(true);
             }
-        };
+        }
+
+        ;
     };
 
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -239,25 +245,25 @@ public class RegisterActivity extends BasicActivity{
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;
-            Log.e("event", "event="+event);
+            Log.e("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //短信注册成功后，返回MainActivity,然后提示新好友
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功,验证通过
 //                    Toast.makeText(getApplicationContext(), "验证码校验成功", Toast.LENGTH_SHORT).show();
                     register();
                     handlerText.sendEmptyMessage(Constant.MESSAGE_VERIFY_SUCCESS);
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){//服务器验证码发送成功
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {//服务器验证码发送成功
                     Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){//返回支持发送验证码的国家列表
+                } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {//返回支持发送验证码的国家列表
                     Toast.makeText(getApplicationContext(), "获取国家列表成功", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                if(flag){
+                if (flag) {
                     mButtonVerify.setText(R.string.link_verify_short);
                     mButtonVerify.setClickable(true);
                     Toast.makeText(RegisterActivity.this, "验证码获取失败，请重新获取", Toast.LENGTH_SHORT).show();
                     mUsernameView.requestFocus();
-                }else{
+                } else {
                     ((Throwable) data).printStackTrace();
 //                    int resId = getStringRes(RegisterActivity.this, "smssdk_network_error");
                     mDlgUtils.closeDlg();
@@ -281,17 +287,17 @@ public class RegisterActivity extends BasicActivity{
 
         //发送注册请求
         UserDao userDao = new UserDao();
-        userDao.register(new User(username, password), verifycode, mQueue, new HttpResponse<Map<String, Object>>() {
+        userDao.register(new User(username, password), verifycode, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean)result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //注册失败
                     mDlgUtils.closeDlg();
-                    Toast.makeText(RegisterActivity.this, (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(RegisterActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
                     int uid = (int) result.get("uid");
 //                                String hashcode = result.get("hashcode").toString();
-                    Log.i("register", String.valueOf(uid)+" register!");
+                    Log.i("register", String.valueOf(uid) + " register!");
                     //注册成功保存注册信息
 //                        SharedPreferences.Editor editor = mSp.edit();
 //                        editor.putInt("USER_ID", uid);

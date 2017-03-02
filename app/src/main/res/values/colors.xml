@@ -23,6 +23,7 @@
     <color name="colorVerifyBackgroundPressed">#00000000</color>
 
     <color name="colorSearchBackground">#EDF0F3</color>
+    <color name="colorSearch">#FF2F3336</color>
     <!--普通颜色-->
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>

@@ -48,12 +48,12 @@ public class TypeShowFragment extends Fragment {
     private String mType = "电视剧";
     private int mPage = 1;
 
-    private RequestQueue mQueue;
+//    private RequestQueue mQueue;
 
     private OnFragmentInteractionListener mListener;
     private TextView mTypeTitle;
     private Button mTypeMoreButton;
-//    private HorizontalScrollView mShowListScrollView;
+    //    private HorizontalScrollView mShowListScrollView;
     private LinearLayout mShowListView;
     private TextView mShowNone;
 
@@ -95,10 +95,10 @@ public class TypeShowFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_type_show, container, false);
         Log.e("showfragment", getContext().toString());
-        mQueue = Volley.newRequestQueue(getContext());
+//        mQueue = Volley.newRequestQueue(getContext());
 
         mTypeTitle = (TextView) view.findViewById(R.id.type_title);
-        if(mType != null && !mType.isEmpty()){
+        if (mType != null && !mType.isEmpty()) {
             mTypeTitle.setText(mType);
         }
 
@@ -126,29 +126,29 @@ public class TypeShowFragment extends Fragment {
     }
 
     //初始化节目列表
-    public void initShowList(){
+    public void initShowList() {
         ShowDao dao = new ShowDao();
         ShowFilter filter = new ShowFilter("localization", mType);
         Log.e("localization", mType);
         filter.addFilter("perpage", String.valueOf(PERPAGE));
         filter.addFilter("page", String.valueOf(mPage));
-        dao.initShowsByFilter(filter, mQueue, new HttpResponse<Map<String, Object>>() {
+        dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
-                if((Boolean)result.get("error")){
+                if ((Boolean) result.get("error")) {
                     //error
-                    Toast.makeText(getContext(), (String)result.get("msg"), Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(getContext(), (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
                     List<Show> showList = (List<Show>) result.get("showList");
-                    if(showList == null || showList.isEmpty()){
-                        Log.e("typeshowfragment", "showlist is null" );
+                    if (showList == null || showList.isEmpty()) {
+                        Log.e("typeshowfragment", "showlist is null");
                         return;
                     }
                     if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
                         mShowListView.removeView(mShowNone);
                     }
                     mShowListView.removeView(mShowNone);
-                    for(Show show : showList){
+                    for (Show show : showList) {
                         TypeShowContentView showView = new TypeShowContentView(getContext());
                         showView.initShow(show);
                         mShowListView.addView(showView);

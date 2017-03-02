@@ -27,21 +27,21 @@ public class ShowDao extends BaseDao {
 
     /**
      * 根据筛选条件初始化节目列表
-     * @param filter 过滤条件
-     * @param queue 网络请求队列
+     *
+     * @param filter   过滤条件
      * @param response 回调方法
      * @return
      */
-    public void initShowsByFilter(ShowFilter filter, RequestQueue queue, final HttpResponse<Map<String, Object>> response){
+    public void initShowsByFilter(ShowFilter filter, final HttpResponse<Map<String, Object>> response) {
 
         List<Show> showList = new ArrayList<Show>();
 
-        if(queue == null){
-            Log.e("showDao", "queue is null");
-            return ;
-        }
+//        if(queue == null){
+//            Log.e("showDao", "queue is null");
+//            return ;
+//        }
 
-        HttpUtils http = new HttpUtils(queue);
+        HttpUtils http = new HttpUtils();
         String getShowsUrl = http.getHost() + "Show/getShows";
 //        if(!filter.isEmpty()){
 //            getShowsUrl += filter.parseFilterToURL();
@@ -54,21 +54,22 @@ public class ShowDao extends BaseDao {
                 JSONObject json;
                 Boolean responseError;
                 try {
-                    json = JSON.parseObject(s);Log.e("showshow", "here");
+                    json = JSON.parseObject(s);
+                    Log.e("showshow", "here");
                     responseError = json.getBoolean("error");
                     returnMap.put("error", responseError);
                     if (responseError) {
                         String msg = json.getString("data");
-                        if("必须用post方式".equals(msg)){
+                        if ("必须用post方式".equals(msg)) {
                             msg = "请求链接失效";
                         }
                         returnMap.put("msg", msg);
                     } else {
                         //
                         JSONArray dataList = json.getJSONArray("data");
-                        Log.e("showDao",dataList.toString());
+                        Log.e("showDao", dataList.toString());
                         String dataListString = JSON.toJSONString(dataList);
-                        Log.e("showList", dataListString );
+                        Log.e("showList", dataListString);
                         List<Show> showList = JSON.parseArray(dataListString, Show.class);
 
                         returnMap.put("showList", showList);
@@ -90,25 +91,25 @@ public class ShowDao extends BaseDao {
 
     }
 
-    public String getShowUrlById(int id){
-        String showUrl = HttpUtils.getHost()+ "Show/getShow/id/"+String.valueOf(id);
+    public String getShowUrlById(int id) {
+        String showUrl = HttpUtils.getHost() + "Show/getShow/id/" + String.valueOf(id);
 
         return showUrl;
     }
 
-    public Show getShowById(int id){
+    public Show getShowById(int id) {
         Show show = new Show();
 
         return show;
     }
 
-    public Show getShowByFilter(ShowFilter filter, RequestQueue queue, final HttpResponse<Map<String, Object>> response){
+    public Show getShowByFilter(ShowFilter filter, final HttpResponse<Map<String, Object>> response) {
         Show show = new Show();
 
         return show;
     }
 
-    public List<Show> getFavoriteShows(){
+    public List<Show> getFavoriteShows() {
         List<Show> favoriteList = new ArrayList<Show>();
 
 
