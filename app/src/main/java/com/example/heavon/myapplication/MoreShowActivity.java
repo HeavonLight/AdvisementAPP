@@ -1,52 +1,45 @@
 package com.example.heavon.myapplication;
 
-import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.andview.refreshview.XRefreshView;
-import com.andview.refreshview.XRefreshViewFooter;
-import com.andview.refreshview.listener.OnBottomLoadMoreTime;
-import com.andview.refreshview.listener.OnTopRefreshTime;
 import com.example.heavon.adapter.MoreShowAdapter;
 import com.example.heavon.dao.ShowDao;
-import com.example.heavon.fragment.TypeShowFragment;
 import com.example.heavon.interfaceClasses.HttpResponse;
-import com.example.heavon.views.TypeShowContentView;
 import com.example.heavon.vo.Show;
 import com.example.heavon.vo.ShowFilter;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class MoreShowActivity extends BasicActivity {
 
-    private final int PERPAGE = 2;
+    private final int PERPAGE = 6;
     private String mType = "分类";
+    private long mTypeId = 0;
     private int mCurPage = 1;
     private List<Show> mShowList;
 
     //UI reference.
-    XRefreshView mShowListScrollView;
-//    SwipeRefreshLayout mShowListSwipeView;
+    FrameLayout mShowListScrollView;
 
-    //    private RequestQueue mQueue;
     private TextView mShowNone;
-    private RecyclerView mShowRecyclerView;
+    private XRecyclerView mShowRecyclerView;;
+
+    private LinearLayoutManager mLayoutManager;
     //adapter.
     private MoreShowAdapter mMoreShowAdapter;
     private int lastVisibleItem = 0;
@@ -56,7 +49,6 @@ public class MoreShowActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_show);
-//        mQueue = Volley.newRequestQueue(this);
 
         initialize();
         initUI();
@@ -68,8 +60,12 @@ public class MoreShowActivity extends BasicActivity {
     public void initialize() {
         Bundle bundle = this.getIntent().getExtras();
         String type = bundle.getString("type");
+        Long typeid = bundle.getLong("typeid");
         if (type != null && !type.isEmpty()) {
             mType = type;
+        }
+        if(typeid != null && typeid >= 0){
+            mTypeId = typeid;
         }
     }
 
@@ -80,70 +76,33 @@ public class MoreShowActivity extends BasicActivity {
 
         mShowNone = (TextView) findViewById(R.id.show_none);
         // Refresh scroll.
-        mShowListScrollView = (XRefreshView) findViewById(R.id.show_list_scroll);
-        mShowListScrollView.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // refresh show list.
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mShowListScrollView.stopRefresh();
-                    }
-                }, 2000);
-                super.onRefresh();
-            }
-
-            @Override
-            public void onLoadMore(boolean isSilence) {
-                loadMoreShow();
-                super.onLoadMore(isSilence);
-            }
-        });
-        mShowListScrollView.setPinnedTime(1000);
-//        mShowListScrollView.setMoveForHorizontal(true);
-        mShowListScrollView.setPullLoadEnable(true);
-        mShowListScrollView.setPullRefreshEnable(true);
-
-//        mShowListSwipeView = (SwipeRefreshLayout) findViewById(R.id.show_list_swipe);
-//        mShowListSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                loadMoreShow();
-//            }
-//        });
-//        mShowListSwipeView.setProgressViewOffset(false, 0, (int) TypedValue
-//                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-//                        .getDisplayMetrics()));
+        mShowListScrollView = (FrameLayout) findViewById(R.id.show_list_scroll);
 
         // Show list.
-        mShowRecyclerView = (RecyclerView) findViewById(R.id.show_recycler_view);
+        mShowRecyclerView = (XRecyclerView) findViewById(R.id.show_recycler_view);
         mShowRecyclerView.setHasFixedSize(true);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mShowRecyclerView.setLayoutManager(mLayoutManager);
+        mShowRecyclerView.setLoadingMoreEnabled(true);
+        mShowRecyclerView.setPullRefreshEnabled(true);
+        mShowRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallPulse);
+        View footView = LayoutInflater.from(this).inflate(R.layout.view_foot, null);
+        footView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mShowRecyclerView.setFootView(footView);
 
-        mShowRecyclerView.setLayoutManager(layoutManager);
-///**---------------------**/
-//        mShowRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE
-//                        && lastVisibleItem + 1 == mMoreShowAdapter.getItemCount()) {
-//                    mShowListSwipeView.setRefreshing(true);
-//                    // 此处在现实项目中，请换成网络请求数据代码，sendRequest .....
-////                    loadMoreShow();
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-//            }
-//        });
-///**---------------------**/
+        mShowRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                refreshShowList();
+            }
 
+            @Override
+            public void onLoadMore() {
+                loadMoreShow();
+            }
+        });
+        //初始化节目列表
         initShowList();
         initToolBar(mType);
     }
@@ -153,10 +112,13 @@ public class MoreShowActivity extends BasicActivity {
      */
     public void initShowList() {
         ShowDao dao = new ShowDao();
-        ShowFilter filter = new ShowFilter("localization", mType);
-        Log.e("moreShowLocalization", mType);
-        filter.addFilter("perpage", String.valueOf(PERPAGE));
-        filter.addFilter("page", String.valueOf(getCurPage()));
+        ShowFilter filter = new ShowFilter("typeid", String.valueOf(mTypeId));
+        Log.e("moreShowLocalization", String.valueOf(mTypeId));
+        filter.put("perpage", String.valueOf(PERPAGE));
+        filter.put("page", String.valueOf(getCurPage()));
+        mShowList = new ArrayList<Show>();
+        mMoreShowAdapter = new MoreShowAdapter(mShowList, MoreShowActivity.this);
+        mShowRecyclerView.setAdapter(mMoreShowAdapter);
         dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
@@ -167,35 +129,72 @@ public class MoreShowActivity extends BasicActivity {
                     List<Show> showList = (List<Show>) result.get("showList");
                     if (showList == null || showList.isEmpty()) {
                         Log.e("moreshowActivity", "showlist is null");
-                        return;
+                        mShowList.clear();
+                        if (mShowNone != null) {
+                            mShowNone.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        mShowList = showList;
+                        if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
+                            mShowNone.setVisibility(View.INVISIBLE);
+                        }
                     }
-                    mShowList = showList;
-                    if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
-                        mShowListScrollView.removeView(mShowNone);
-//                        mShowListSwipeView.removeView(mShowNone);
-                    }
-                    mMoreShowAdapter = new MoreShowAdapter(showList, MoreShowActivity.this);
-                    //当需要使用数据不满一屏时不显示点击加载更多的效果时，解注释下面的三行代码
-                    //并注释掉第四行代码
-//                    CustomerFooter customerFooter = new CustomerFooter(this);
-//                    customerFooter.setRecyclerView(recyclerView);
-//                    recyclerviewAdapter.setCustomLoadMoreView(customerFooter);
-//                    mMoreShowAdapter.setCustomLoadMoreView(new XRefreshViewFooter(MoreShowActivity.this));
-
-                    mShowRecyclerView.setAdapter(mMoreShowAdapter);
+                    //更新节目列表
+                    mMoreShowAdapter.setData(mShowList);
                 }
             }
         });
     }
 
     /**
+     * 刷新节目列表
+     */
+    public void refreshShowList(){
+        ShowDao dao = new ShowDao();
+        ShowFilter filter = new ShowFilter("typeid", String.valueOf(mTypeId));
+        filter.put("perpage", String.valueOf(PERPAGE * getCurPage()));
+        filter.put("page", String.valueOf(1));
+        Log.e("moreShow refresh perpage", String.valueOf(filter.getFilter().get("perpage")));
+        dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
+            @Override
+            public void getHttpResponse(Map<String, Object> result) {
+                if ((Boolean) result.get("error")) {
+                    //失败
+                    Toast.makeText(MoreShowActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
+                } else {
+                    //成功
+                    List<Show> showList = (List<Show>) result.get("showList");
+                    //判断空状态
+                    if (showList == null || showList.isEmpty()) {
+                        Log.e("moreshowActivity", "showlist is null");
+                        mShowList.clear();
+                        if (mShowNone != null) {
+                            mShowNone.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        mShowList = showList;
+                        if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
+                            mShowNone.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }
+                //更新节目列表
+                mMoreShowAdapter.setData(mShowList);
+                //结束刷新
+                mShowRecyclerView.refreshComplete();
+            }
+
+        });
+    }
+    /**
      * 加载更多节目
      */
     public void loadMoreShow() {
         ShowDao dao = new ShowDao();
-        ShowFilter filter = new ShowFilter("localization", mType);
-        filter.addFilter("perpage", String.valueOf(PERPAGE));
-        filter.addFilter("page", String.valueOf(getCurPage() + 1));
+        ShowFilter filter = new ShowFilter("typeid", String.valueOf(mTypeId));
+        filter.put("perpage", String.valueOf(PERPAGE));
+        filter.put("page", String.valueOf(getCurPage() + 1));
+        Log.e("moreShow loadMore Page", String.valueOf(filter.getFilter().get("page")));
         dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
@@ -207,27 +206,21 @@ public class MoreShowActivity extends BasicActivity {
                     List<Show> showList = (List<Show>) result.get("showList");
                     if (showList == null || showList.isEmpty()) {
                         Log.e("moreshowActivity", "showlist is null");
-                        mShowListScrollView.setLoadComplete(true);
-                        return;
-                    } else {
+                        mShowRecyclerView.setNoMore(true);
+                    }else{
                         //判断空状态
                         if (mShowNone != null && mShowNone.getVisibility() == View.VISIBLE) {
-                            mShowListScrollView.removeView(mShowNone);
-//                            mShowListSwipeView.removeView(mShowNone);
+                            mShowNone.setVisibility(View.VISIBLE);
                         }
                         //添加加载内容
                         mShowList.addAll(showList);
-                        for (Show show : showList) {
-                            mMoreShowAdapter.insert(show, mMoreShowAdapter.getAdapterItemCount());
-                        }
-
                         //下一页
                         nextPage();
-                        // 加载完成必须调用此方法停止加载
-                        mShowListScrollView.stopLoadMore();
-//                        mShowListSwipeView.setRefreshing(false);
+                        mShowRecyclerView.setNoMore(false);
                     }
                 }
+                //停止加载
+                mShowRecyclerView.loadMoreComplete();
             }
         });
     }

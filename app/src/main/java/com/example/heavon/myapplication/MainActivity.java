@@ -10,9 +10,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import com.android.volley.RequestQueue;
 import com.example.heavon.fragment.MainFragment;
@@ -37,9 +42,10 @@ public class MainActivity extends BasicActivity implements
         TypeShowFragment.OnFragmentInteractionListener,
         View.OnClickListener {
 
-    private Button mIndicatorMain;
-    private Button mIndicatorType;
-    private Button mIndicatorPerson;
+    private RadioButton mIndicatorMain;
+    private RadioButton mIndicatorType;
+    private RadioButton mIndicatorPerson;
+    private List<RadioButton> mIndicatorList;
 
     private List<Fragment> mFragmentList;
     private android.support.v4.app.FragmentManager mFragmentManager;
@@ -47,9 +53,6 @@ public class MainActivity extends BasicActivity implements
     private Fragment mCurFragment;
 
     private int mCurPos = 0;
-    private EditText mSearchEdit;
-
-//    private RequestQueue mQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,6 @@ public class MainActivity extends BasicActivity implements
 
     //初始化UI
     public void initUI() {
-        initSearch();
         initIndicator();
         initFragment();
     }
@@ -80,14 +82,13 @@ public class MainActivity extends BasicActivity implements
         mFragmentList.add(personFragment);
 
         changeIndicator(0);
-//        mFragmentBox = findViewById(R.id.fragment_box);
     }
 
     //初始化底部导航
     public void initIndicator() {
-        mIndicatorMain = (Button) findViewById(R.id.indicator_main);
-        mIndicatorType = (Button) findViewById(R.id.indicator_type);
-        mIndicatorPerson = (Button) findViewById(R.id.indicator_person);
+        mIndicatorMain = (RadioButton) findViewById(R.id.indicator_main);
+        mIndicatorType = (RadioButton) findViewById(R.id.indicator_type);
+        mIndicatorPerson = (RadioButton) findViewById(R.id.indicator_person);
 
         mIndicatorMain.setOnClickListener(this);
         mIndicatorType.setOnClickListener(this);
@@ -96,20 +97,11 @@ public class MainActivity extends BasicActivity implements
         mIndicatorMain.setTag(0);
         mIndicatorType.setTag(1);
         mIndicatorPerson.setTag(2);
-    }
 
-    //初始化搜索栏
-    public void initSearch() {
-        mSearchEdit = (EditText) findViewById(R.id.search);
-        mSearchEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    enterSearch();
-                    mSearchEdit.clearFocus();
-                }
-            }
-        });
+        mIndicatorList = new ArrayList<RadioButton>();
+        mIndicatorList.add(mIndicatorMain);
+        mIndicatorList.add(mIndicatorType);
+        mIndicatorList.add(mIndicatorPerson);
     }
 
     //实现Fragment事件监听
@@ -118,9 +110,47 @@ public class MainActivity extends BasicActivity implements
 
     }
 
-    //退出登录
+    //进入添加节目页
     @Override
-    public void logout() {
+    public void addShow() {
+        enterAddShow();
+    }
+
+    //进入管理节目页
+    @Override
+    public void manageShow() {
+        enterManageShow();
+    }
+
+    @Override
+    public void feedback() {
+        enterFeedback();
+    }
+
+    @Override
+    public void about() {
+        enterAbout();
+    }
+
+    @Override
+    public void share() {
+
+    }
+
+    @Override
+    public void protocol() {
+        enterProtocol();
+    }
+
+    //进入搜索页
+    @Override
+    public void search() {
+        enterSearch();
+    }
+
+    //跳转到登录页
+    @Override
+    public void login() {
         gotoLogin();
     }
 
@@ -131,24 +161,25 @@ public class MainActivity extends BasicActivity implements
 
     private void changeIndicator(int index) {
         mCurPos = index;
+        //改变 fragment
         mFragmentTransaction = mFragmentManager.beginTransaction();
-
+        //隐藏其他fragment
         if (null != mCurFragment) {
             mFragmentTransaction.hide(mCurFragment);
         }
-
+        //显示当前fragment
         Fragment fragment = mFragmentManager.findFragmentByTag(mFragmentList.get(mCurPos).getClass().getName());
         if (null == fragment) {
             fragment = mFragmentList.get(index);
         }
         mCurFragment = fragment;
-
         if (!fragment.isAdded()) {
             mFragmentTransaction.add(R.id.fragment_box, fragment, fragment.getClass().getName());
         } else {
             mFragmentTransaction.show(fragment);
         }
-
         mFragmentTransaction.commit();
+        //改变底部导航
+        mIndicatorList.get(mCurPos).setChecked(true);
     }
 }

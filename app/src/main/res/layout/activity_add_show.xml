@@ -4,10 +4,33 @@
     android:id="@+id/activity_add_show"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.AddShowActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_basic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:minHeight="@dimen/toolbar_height"
+        style="@style/ToolBar">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/ToolBar.Title"
+            android:text="@string/edit_show_title" />
+    </android.support.v7.widget.Toolbar>
+
+    <com.example.heavon.views.ShowWebView
+        android:id="@+id/show_box_web"
+        android:layout_below="@id/toolbar_basic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.example.heavon.views.ShowWebView>
 
 </RelativeLayout>

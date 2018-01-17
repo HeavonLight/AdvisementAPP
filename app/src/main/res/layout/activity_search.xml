@@ -22,25 +22,19 @@
 
         </fragment>
     </FrameLayout>
-
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorSearchBackground">
+        android:layout_height="@dimen/line"
+        android:background="@color/colorLine">
 
     </View>
 
     <FrameLayout
         android:id="@+id/fragment_box"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/padding_body"
-        android:paddingRight="@dimen/padding_body">
+        android:layout_height="match_parent">
 
 
     </FrameLayout>
-
-
-
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.example.heavon.constant.Constant;
 import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.utils.HttpUtils;
 import com.example.heavon.vo.User;
@@ -56,14 +57,18 @@ public class UserDao extends BaseDao {
                     } else {
                         JSONObject data = json.getJSONObject("data");
                         int uid = data.getInt("id");
+                        int level = data.getInt("level");
 //                        String hashcode = data.getString("hashcode");
 //                        String token = data.getString("token");
                         returnMap.put("uid", uid);
+                        returnMap.put("level", level);
 //                        returnMap.put("hashcode", hashcode);
 //                        returnMap.put("token", token);
                     }
                 } catch (Exception e) {
                     e.getStackTrace();
+                    returnMap.put("msg", e.getMessage());
+                    Log.e("login_error", e.getMessage());
                 }
                 //将returnMap作为参数回调
                 response.getHttpResponse(returnMap);
@@ -108,6 +113,7 @@ public class UserDao extends BaseDao {
                     }
                 } catch (Exception e) {
                     e.getStackTrace();
+                    returnMap.put("msg", e.getMessage());
                 }
                 //将returnMap作为参数回调
                 response.getHttpResponse(returnMap);
@@ -151,6 +157,7 @@ public class UserDao extends BaseDao {
                     returnMap.put("msg", msg);
                 } catch (Exception e) {
                     e.getStackTrace();
+                    returnMap.put("msg", e.getMessage());
                 }
                 //将returnMap作为参数回调
                 response.getHttpResponse(returnMap);
@@ -190,6 +197,7 @@ public class UserDao extends BaseDao {
                     }
                 } catch (Exception e) {
                     e.getStackTrace();
+                    returnMap.put("msg", e.getMessage());
                 }
                 //将returnMap作为参数回调
                 response.getHttpResponse(returnMap);
@@ -266,10 +274,35 @@ public class UserDao extends BaseDao {
         if (uid > 0) {
             return true;
         } else {
-            Log.e("searchDao", "user not login.");
+            Log.e("userDao", "user not login.");
             return false;
         }
     }
+
+    /**
+     * 获取用户权限等级
+     *
+     * @param context 当前上下文
+     * @return 权限等级
+     */
+    public int getLevel(Context context){
+        SharedPreferences sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        int level = sp.getInt("USER_LEVEL", Constant.LEVEL_UNLOGIN);
+        return level;
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @param context 当前上下文
+     * @return 用户名
+     */
+    public String getUserName(Context context){
+        SharedPreferences sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String username = sp.getString("USER_NAME", "");
+        return username;
+    }
+
     //-------------未完成----------------
 
     /**

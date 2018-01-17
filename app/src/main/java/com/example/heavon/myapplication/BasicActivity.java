@@ -1,13 +1,18 @@
 package com.example.heavon.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -39,9 +44,11 @@ public class BasicActivity extends AppCompatActivity {
                 setTitle(title);
             }
         }else{
-            tvTitle.setText(title);
+            if(title != null){
+                tvTitle.setText(title);
+            }
         }
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.mipmap.back_blue);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +64,7 @@ public class BasicActivity extends AppCompatActivity {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
                 //底部导航栏
                 //window.setNavigationBarColor(activity.getResources().getColor(colorResId));
@@ -65,6 +72,60 @@ public class BasicActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //修改当前 Activity 的显示模式，hideStatusBarBackground :true 全屏模式，false 着色模式
+    protected void setStatusBar(boolean hideStatusBarBackground) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (hideStatusBarBackground) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            } else {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            }
+
+            ViewGroup mContentView = (ViewGroup) window.findViewById(Window.ID_ANDROID_CONTENT);
+            View mChildView = mContentView.getChildAt(0);
+            if (mChildView != null) {
+                if (hideStatusBarBackground) {
+                    mChildView.setPadding(
+                            mChildView.getPaddingLeft(),
+                            0,
+                            mChildView.getPaddingRight(),
+                            mChildView.getPaddingBottom()
+                    );
+                } else {
+                    int statusHeight = getStatusBarHeight(this);
+                    mChildView.setPadding(
+                            mChildView.getPaddingLeft(),
+                            statusHeight,
+                            mChildView.getPaddingRight(),
+                            mChildView.getPaddingBottom()
+                    );
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            if (hideStatusBarBackground) {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(Color.TRANSPARENT);
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            } else {
+                window.setStatusBarColor(getResources().getColor(R.color.white));
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            }
+        }
+    }
+
+    //获取系统状态栏高度
+    public static int getStatusBarHeight(Activity activity) {
+        Rect frame = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        return frame.top;
     }
 
     //跳转到主页面
@@ -81,9 +142,39 @@ public class BasicActivity extends AppCompatActivity {
         this.finish();
     }
 
-    //跳转到登录页面
+    //进入到搜索页面
     public void enterSearch(){
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到添加节目页
+    public void enterAddShow(){
+        Intent intent = new Intent(this, AddShowActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到管理节目页
+    public void enterManageShow(){
+        Intent intent = new Intent(this, ManageShowActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到反馈页
+    public void enterFeedback(){
+        Intent intent = new Intent(this, FeedbackActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到关于页
+    public void enterAbout() {
+        Intent intent = new Intent(this, AboutActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到协议页
+    public void enterProtocol() {
+        Intent intent = new Intent(this, ProtocolActivity.class);
         this.startActivity(intent);
     }
 }

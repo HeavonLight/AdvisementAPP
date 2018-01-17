@@ -4,96 +4,183 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.MainActivity">
-
-    <RelativeLayout
-        android:id="@+id/search_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-
-        <EditText
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textAlignment="center"
-            android:hint="@string/prompt_search_long"
-            android:inputType="text"
-            android:maxLines="1"
-            android:background="@drawable/bg_search_background"/>
-
-    </RelativeLayout>
-
-    <!--<FrameLayout-->
-        <!--android:id="@+id/search_box"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-        <!--<EditText-->
-            <!--android:id="@+id/search"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/prompt_search"-->
-            <!--android:textAlignment="center"-->
-            <!--android:inputType="text"-->
-            <!--android:background="@drawable/bg_search_background"-->
-            <!--android:maxLines="1" />-->
-        <!--&lt;!&ndash;<fragment&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/fragment_search"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:name="com.example.heavon.fragment.SearchFragment"&ndash;&gt;-->
-            <!--&lt;!&ndash;tools:layout="@layout/fragment_search">&ndash;&gt;-->
-
-        <!--&lt;!&ndash;</fragment>&ndash;&gt;-->
-    <!--</FrameLayout>-->
 
     <FrameLayout
         android:id="@+id/fragment_box"
-        android:layout_below="@+id/search_box"
-        android:layout_above="@+id/indicator_box"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_line_large">
+        android:layout_above="@+id/indicator_line">
 
     </FrameLayout>
 
-    <LinearLayout
+    <View
+        android:id="@+id/indicator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/colorLine"
+        android:layout_alignTop="@+id/indicator_box" />
+    <RadioGroup
         android:id="@+id/indicator_box"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/indicator_height"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
 
-        <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <RadioButton
             android:id="@+id/indicator_main"
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="@string/indicator_main" />
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_main_indicator"
+            android:text="@string/indicator_main"
+            android:checked="true"
+            style="@style/Indicator"/>
 
-        <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <RadioButton
             android:id="@+id/indicator_type"
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="@string/indicator_type" />
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_type_indicator"
+            android:text="@string/indicator_type"
+            style="@style/Indicator"/>
 
-        <Button
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <RadioButton
             android:id="@+id/indicator_person"
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="@string/indicator_person" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_person_indicator"
+            android:text="@string/indicator_person"
+            style="@style/Indicator"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </RadioGroup>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/indicator_box"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="49dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:elevation="3dp"-->
+        <!--android:layout_alignParentBottom="true">-->
+
+        <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"/>-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/indicator_main"-->
+            <!--android:layout_width="66dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:focusableInTouchMode="true">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/icon_main"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:duplicateParentState="true"-->
+                <!--android:src="@drawable/ic_main_indicator"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/height_text_indicator"-->
+                <!--android:layout_below="@id/icon_main"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:gravity="center"-->
+                <!--android:duplicateParentState="true"-->
+                <!--style="@style/Text.Indicator"-->
+                <!--android:text="@string/indicator_main"/>-->
+
+            <!--<requestFocus />-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"/>-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/indicator_type"-->
+            <!--android:layout_width="66dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:focusableInTouchMode="true">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/icon_type"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:duplicateParentState="true"-->
+                <!--android:src="@drawable/ic_type_indicator"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/height_text_indicator"-->
+                <!--android:layout_below="@id/icon_type"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:gravity="center"-->
+                <!--android:duplicateParentState="true"-->
+                <!--style="@style/Text.Indicator"-->
+                <!--android:text="@string/indicator_type"/>-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"/>-->
+
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/indicator_person"-->
+            <!--android:layout_width="66dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:paddingBottom="4dp"-->
+            <!--android:focusableInTouchMode="true">-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/icon_person"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:duplicateParentState="true"-->
+                <!--android:src="@drawable/ic_person_indicator"/>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/height_text_indicator"-->
+                <!--android:layout_below="@id/icon_person"-->
+                <!--android:layout_marginTop="2dp"-->
+                <!--android:gravity="center"-->
+                <!--android:duplicateParentState="true"-->
+                <!--style="@style/Text.Indicator"-->
+                <!--android:text="@string/indicator_person"/>-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"/>-->
+    <!--</LinearLayout>-->
 </RelativeLayout>

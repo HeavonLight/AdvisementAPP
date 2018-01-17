@@ -9,19 +9,29 @@
     <RelativeLayout
         android:id="@+id/show_title_box"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp">
         <TextView
             android:id="@+id/type_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            style="@style/TextTitle"
+            style="@style/TypeShowTitle"
             android:text="电视剧"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/link_type_more"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignBottom="@+id/type_title"/>-->
+        <!---->
         <Button
             android:id="@+id/bt_type_more"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
+            android:layout_alignBottom="@+id/type_title"
             android:layout_alignParentRight="true"
             style="@style/Link.More"
             android:text="@string/link_type_more" />

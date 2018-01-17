@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_feedback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.example.heavon.myapplication.FeedbackActivity">
+
+    <RelativeLayout
+        android:id="@+id/toolbar_basic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginLeft="@dimen/margin_body"
+        android:layout_marginRight="@dimen/margin_body"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/link_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/Link"
+            android:textSize="16sp"
+            android:text="@string/link_cancel" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/ToolBar.Title"
+            android:text="@string/feedback_title" />
+
+        <TextView
+            android:id="@+id/link_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/Link"
+            android:textSize="16sp"
+            android:text="@string/link_send" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/colorLine" />
+
+    <EditText
+        android:id="@+id/feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_body"
+        style="@style/ShowSummaryEdit"
+        android:textCursorDrawable="@color/colorTextCursor"
+        android:hint="@string/edit_feedback_hint"
+        android:inputType="textMultiLine" />
+
+
+</LinearLayout>

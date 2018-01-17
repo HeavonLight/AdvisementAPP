@@ -8,6 +8,7 @@ import java.util.Map;
 
 public interface Filter<T> {
     void setFilter(Map<String, T> filter);
-    void addFilter(String k, T v);
+    void put(String k, T v);
+    void delete(String k);
     Map<String, T> getFilter();
 }

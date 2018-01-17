@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +12,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.heavon.adapter.MoreShowAdapter;
 import com.example.heavon.dao.SearchDao;
-import com.example.heavon.dao.ShowDao;
 import com.example.heavon.dao.UserDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
-import com.example.heavon.myapplication.MoreShowActivity;
 import com.example.heavon.myapplication.R;
-import com.example.heavon.vo.Search;
 import com.example.heavon.vo.Show;
 import com.example.heavon.vo.ShowFilter;
-import com.example.heavon.vo.User;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.List;
@@ -130,8 +122,8 @@ public class SearchAfterFragment extends Fragment {
     public void initShowList() {
         SearchDao searchDao = new SearchDao();
         ShowFilter filter = new ShowFilter("keyword", mKeyword);
-        filter.addFilter("perpage", String.valueOf(PERPAGE));
-        filter.addFilter("page", String.valueOf(mPage));
+        filter.put("perpage", String.valueOf(PERPAGE));
+        filter.put("page", String.valueOf(mPage));
         searchDao.searchShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {
@@ -161,7 +153,7 @@ public class SearchAfterFragment extends Fragment {
         //保存本地搜索历史
         if (!(new UserDao().checkLogin(getContext()))) {
             searchDao.addSearchHistory(mKeyword);
-            Log.e("searchAfterFragment", "local history search add.");
+            Log.e("searchAfterFragment", "local history search put.");
         }
     }
 
@@ -171,8 +163,8 @@ public class SearchAfterFragment extends Fragment {
     public void loadMoreShow() {
         SearchDao searchDao = new SearchDao();
         ShowFilter filter = new ShowFilter("keyword", mKeyword);
-        filter.addFilter("perpage", String.valueOf(PERPAGE));
-        filter.addFilter("page", String.valueOf(getCurPage() + 1));
+        filter.put("perpage", String.valueOf(PERPAGE));
+        filter.put("page", String.valueOf(getCurPage() + 1));
         searchDao.searchShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {

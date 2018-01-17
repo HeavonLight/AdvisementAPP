@@ -280,6 +280,7 @@ public class LoginActivity extends Activity {
                         Toast.makeText(LoginActivity.this, (String) result.get("msg"), Toast.LENGTH_SHORT).show();
                     } else {
                         int uid = (int) result.get("uid");
+                        int level = (int) result.get("level");
 //                                String hashcode = result.get("hashcode").toString();
                         Log.i("login", String.valueOf(uid) + " login!");
                         //登录成功保存登录信息
@@ -288,6 +289,7 @@ public class LoginActivity extends Activity {
                         editor.putBoolean("AUTO_ISCHECK", true);
                         editor.putString("USER_NAME", username);
                         editor.putString("PASSWORD", password);
+                        editor.putInt("USER_LEVEL", level);
 //                        editor.putString("HASH_CODE", hashcode);
                         editor.commit();
 
@@ -375,7 +377,7 @@ public class LoginActivity extends Activity {
 //            while (emailCur.moveToNext()) {
 //                String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
 //                        .CommonDataKinds.Email.DATA));
-//                emailAddressCollection.add(email);
+//                emailAddressCollection.put(email);
 //            }
 //            emailCur.close();
 //

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">大内密探</string>
     <string name="title_activity_login">登录</string>
 
     <!-- Strings related to login -->
@@ -16,7 +16,7 @@
         completions."
     </string>
     <string name="prompt_username">手机号</string>
-    <string name="title_activity_basic">广告投放</string>
+    <string name="title_activity_basic">大内密探</string>
     <string name="error_invalid_username">用户名格式错误</string>
     <string name="error_invalid_verifycode">验证码错误</string>
     <string name="error_inconsistent_password">密码不一致</string>
@@ -56,5 +56,32 @@
     <string name="search_history_none">暂无搜索</string>
     <string name="search_hot_none">暂无搜索</string>
     <string name="logout">退出登录</string>
-
+    <string name="login">登录</string>
+    <string name="person_show_manager">管理节目</string>
+    <string name="person_share">分享给好友</string>
+    <string name="person_feedback">意见反馈</string>
+    <string name="person_protocol">用户协议</string>
+    <string name="person_about">关于</string>
+    <string name="type_title">分类</string>
+    <string name="edit_show_title">填写节目信息</string>
+    <string name="edit_summary_title">填写简介</string>
+    <string name="edit_show_summary_hint">填写一段简介帮助需要者更快的了解节目信息</string>
+    <string name="link_save">保存</string>
+    <string name="title_manage_show">管理节目</string>
+    <string name="title_distribution_platform">播放平台：</string>
+    <string name="title_activity_main">大内密探</string>
+    <string name="title_activity_register">注册</string>
+    <string name="title_activity_find_password">找回密码</string>
+    <string name="title_activity_search">搜索</string>
+    <string name="title_activity_show">节目详情</string>
+    <string name="title_activity_add_show">添加节目</string>
+    <string name="title_activity_edit_show">编辑节目</string>
+    <string name="title_activity_manage_show">管理节目</string>
+    <string name="title_activity_more_show">更多节目</string>
+    <string name="feedback_title">意见反馈</string>
+    <string name="link_send">发送</string>
+    <string name="edit_feedback_hint">提供反馈帮助我们更好的优化产品</string>
+    <string name="title_activity_feed_back">反馈</string>
+    <string name="title_activity_about">关于</string>
+    <string name="title_activity_protocol">协议</string>
 </resources>

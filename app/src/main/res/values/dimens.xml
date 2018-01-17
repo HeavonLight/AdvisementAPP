@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="edittext_height">45dp</dimen>
-    <dimen name="toolbar_height">40dp</dimen>
+    <dimen name="toolbar_height">44dp</dimen>
 
     <dimen name="edittext_marginTop">12dp</dimen>
     <dimen name="button_marginTop">18dp</dimen>
@@ -23,4 +23,7 @@
     <dimen name="padding_body">16dp</dimen>
 
     <dimen name="line">0.5dp</dimen>
+    <dimen name="height_text_indicator">14dp</dimen>
+    <dimen name="margin_item_person">22dp</dimen>
+    <dimen name="indicator_height">49dp</dimen>
 </resources>

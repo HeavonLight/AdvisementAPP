@@ -39,25 +39,53 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".BasicActivity"
+            android:label="@string/title_activity_basic" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" />
+        <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".BasicActivity"
-            android:label="@string/title_activity_basic" />
-        <activity android:name=".RegisterActivity" />
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register" />
+        <activity
+            android:name=".FindPasswordActivity"
+            android:label="@string/title_activity_find_password" />
         <activity
             android:name=".SearchActivity"
-            android:windowSoftInputMode="adjustPan">
-
-        </activity>
-        <activity android:name=".ShowActivity" />
+            android:label="@string/title_activity_search" />
+        <activity
+            android:name=".ShowActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_show" />
+        <activity
+            android:name=".AddShowActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_add_show" />
+        <activity
+            android:name=".EditShowActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_edit_show" />
+        <activity
+            android:name=".ManageShowActivity"
+            android:label="@string/title_activity_manage_show" />
+        <activity
+            android:name=".MoreShowActivity"
+            android:label="@string/title_activity_more_show" />
         <activity
             android:name=".UploadActivity"
             android:label="上传" />
-        <activity android:name=".MoreShowActivity" />
-        <activity android:name=".FindPasswordActivity" />
-        <activity android:name=".AddShowActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity
+            android:name=".FeedbackActivity"
+            android:label="@string/title_activity_feed_back" />
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" />
+        <activity
+            android:name=".ProtocolActivity"
+            android:label="@string/title_activity_protocol" />
     </application>
 
 </manifest>

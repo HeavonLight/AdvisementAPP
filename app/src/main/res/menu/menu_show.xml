@@ -5,15 +5,22 @@
     tools:context="com.example.heavon.myapplication.ShowActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
+
     <item
-        android:id="@+id/menu_favorite"
-        android:title="favorite"
-        android:icon="@drawable/back"
+        android:id="@+id/menu_edit"
+        android:title="edit"
+        android:icon="@mipmap/edit_blue"
+        android:visible="false"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_share"
         android:title="share"
-        android:icon="@drawable/back"
+        android:icon="@mipmap/share_blue"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_favorite"
+        android:title="favorite"
+        android:icon="@mipmap/favorite_blue"
         app:showAsAction="ifRoom"/>
 
 </menu>

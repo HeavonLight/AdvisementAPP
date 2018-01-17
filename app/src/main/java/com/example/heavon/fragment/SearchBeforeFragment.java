@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,9 @@ import com.example.heavon.dao.SearchDao;
 import com.example.heavon.dao.UserDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
 import com.example.heavon.myapplication.R;
+import com.example.heavon.views.DividerGridItemDecoration;
 import com.example.heavon.vo.Search;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -119,6 +122,7 @@ public class SearchBeforeFragment extends Fragment {
         final LinearLayoutManager historyLayoutManger = new LinearLayoutManager(getContext());
         historyLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
         mSearchHistoryListView.setLayoutManager(historyLayoutManger);
+        mSearchHistoryListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mHistoryList = new ArrayList<>();
         mHistoryAdapter = new HistoryAdapter(mHistoryList, getContext());
         mSearchHistoryListView.setAdapter(mHistoryAdapter);
@@ -129,6 +133,7 @@ public class SearchBeforeFragment extends Fragment {
         mSearchHotListView.setHasFixedSize(true);
         final GridLayoutManager hotLayoutManager = new GridLayoutManager(getContext(), 2);
         mSearchHotListView.setLayoutManager(hotLayoutManager);
+        mSearchHotListView.addItemDecoration(new DividerGridItemDecoration(getContext()));
 
         initSearchHot();
         return view;

@@ -10,16 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.heavon.dao.ShowDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
-import com.example.heavon.myapplication.LoginActivity;
 import com.example.heavon.myapplication.MoreShowActivity;
 import com.example.heavon.myapplication.R;
 import com.example.heavon.views.TypeShowContentView;
@@ -40,11 +36,13 @@ import java.util.Map;
 public class TypeShowFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_TYPE_ID = "id";
     private static final String ARG_TYPE = "type";
     private static final String ARG_PAGE = "page";
 
     private final int PERPAGE = 4;
     // TODO: Rename and change types of parameters
+    private long mTypeId = 1;
     private String mType = "电视剧";
     private int mPage = 1;
 
@@ -71,9 +69,10 @@ public class TypeShowFragment extends Fragment {
      * @return A new instance of fragment TypeShowFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TypeShowFragment newInstance(String type, int page) {
+    public static TypeShowFragment newInstance(Long typeid, String type, int page) {
         TypeShowFragment fragment = new TypeShowFragment();
         Bundle args = new Bundle();
+        args.putLong(ARG_TYPE_ID, typeid);
         args.putString(ARG_TYPE, type);
         args.putInt(ARG_PAGE, page);
         fragment.setArguments(args);
@@ -84,6 +83,7 @@ public class TypeShowFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mTypeId = getArguments().getLong(ARG_TYPE_ID);
             mType = getArguments().getString(ARG_TYPE);
             mPage = getArguments().getInt(ARG_PAGE);
         }
@@ -95,7 +95,6 @@ public class TypeShowFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_type_show, container, false);
         Log.e("showfragment", getContext().toString());
-//        mQueue = Volley.newRequestQueue(getContext());
 
         mTypeTitle = (TextView) view.findViewById(R.id.type_title);
         if (mType != null && !mType.isEmpty()) {
@@ -106,13 +105,15 @@ public class TypeShowFragment extends Fragment {
         mTypeMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /**----------wait to modify-----------**/
+                /**----------查看更多-----------**/
+                //进入到更多分类节目页面
                 Intent intent = new Intent(getContext(), MoreShowActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("type", mType);
+                bundle.putLong("typeid", mTypeId);
                 intent.putExtras(bundle);
                 startActivity(intent);
-                /**----------wait to modify-----------**/
+                /**----------查看更多-----------**/
             }
         });
 
@@ -128,10 +129,10 @@ public class TypeShowFragment extends Fragment {
     //初始化节目列表
     public void initShowList() {
         ShowDao dao = new ShowDao();
-        ShowFilter filter = new ShowFilter("localization", mType);
-        Log.e("localization", mType);
-        filter.addFilter("perpage", String.valueOf(PERPAGE));
-        filter.addFilter("page", String.valueOf(mPage));
+        ShowFilter filter = new ShowFilter("typeid", String.valueOf(mTypeId));
+        Log.e("typeid", String.valueOf(mTypeId));
+        filter.put("perpage", String.valueOf(PERPAGE));
+        filter.put("page", String.valueOf(mPage));
         dao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {

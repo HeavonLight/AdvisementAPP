@@ -1,11 +1,64 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/margin_body"
+    android:layout_marginRight="@dimen/margin_body"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="true"
     tools:context="com.example.heavon.fragment.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/search_box"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_search_background">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true">
+            <ImageView
+                android:id="@+id/search_img"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/search"/>
+            <TextView
+                android:id="@+id/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/search_img"
+                android:text="@string/prompt_search_long"
+                android:layout_marginLeft="7dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+        <!--<EditText-->
+            <!--android:id="@+id/search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/bg_search_background"-->
+            <!--android:drawableLeft="@mipmap/search"-->
+            <!--android:hint="@string/prompt_search_long"-->
+            <!--android:inputType="text"-->
+            <!--android:maxLines="1"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="12sp" />-->
+
+    </RelativeLayout>
 
     <!--分类滑动栏-->
     <ScrollView
@@ -13,21 +66,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
+
         <LinearLayout
             android:id="@+id/ll_shows"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_body"
+            android:orientation="vertical">
             <!--推荐栏-->
             <com.jude.rollviewpager.RollPagerView
                 android:id="@+id/roll_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                app:rollviewpager_play_delay="3000"/>
+                android:layout_height="147dp"
+                app:rollviewpager_play_delay="3000" />
 
         </LinearLayout>
 
-
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

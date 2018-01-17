@@ -1,20 +1,30 @@
 package com.example.heavon.myapplication;
 
+import android.content.Intent;
 import android.content.res.ObbInfo;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.example.heavon.constant.Constant;
 import com.example.heavon.dao.ShowDao;
+import com.example.heavon.dao.UserDao;
+import com.example.heavon.utils.DlgUtils;
 import com.example.heavon.utils.HttpUtils;
+import com.example.heavon.views.ShowWebView;
+import com.example.heavon.vo.Show;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 
@@ -25,7 +35,7 @@ public class ShowActivity extends BasicActivity {
 
     private ShowDao showDao = new ShowDao();
     // UI preference.
-    private WebView mShowBoxWeb;
+    private ShowWebView mShowBoxWeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,28 +63,12 @@ public class ShowActivity extends BasicActivity {
      * 初始化UI
      */
     public void initUI(){
-        mShowBoxWeb = (WebView) findViewById(R.id.show_box_web);
-        mShowBoxWeb.getSettings().setJavaScriptEnabled(true);
-        mShowBoxWeb.getSettings().setDefaultTextEncodingName("utf-8");
-        mShowBoxWeb.addJavascriptInterface(new Object(){
-            @JavascriptInterface
-            public void toast(String msg){
-                Toast.makeText(ShowActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        }, "showObj");
-        mShowBoxWeb.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                shouldOverrideUrlLoading(view, request);
-                return true;
-            }
-        });
+        mShowBoxWeb = (ShowWebView) findViewById(R.id.show_box_web);
         //加载URL
         if(!url.isEmpty()){
             Log.e("showActivity", url);
             mShowBoxWeb.loadUrl(url);
         }
-
         Toast.makeText(this, "id = "+mSid, Toast.LENGTH_SHORT).show();
 
         initToolBar(null);
@@ -98,6 +92,13 @@ public class ShowActivity extends BasicActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_show, menu);
+
+        //已登录且是管理员
+        UserDao userDao = new UserDao();
+        if(userDao.checkLogin(this) && userDao.getLevel(this) >= Constant.LEVEL_MANAGER){
+            menu.findItem(R.id.menu_edit).setVisible(true);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -108,7 +109,7 @@ public class ShowActivity extends BasicActivity {
                 /**----------wait to modify-----------**/
 
                 Toast.makeText(this, "favorite", Toast.LENGTH_SHORT).show();
-                mShowBoxWeb.loadUrl("javascript:setText('喜欢')");
+//                mShowBoxWeb.loadUrl("javascript:setText('喜欢')");
                 /**----------wait to modify-----------**/
             }break;
             case R.id.menu_share:{
@@ -118,11 +119,18 @@ public class ShowActivity extends BasicActivity {
 
                 /**----------wait to modify-----------**/
             }break;
+            case R.id.menu_edit:{
+                /**----------跳转到节目编辑页-----------**/
+                Intent intent = new Intent(this, EditShowActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("sid", mSid);
+                intent.putExtras(bundle);
+                this.startActivity(intent);
+                /**----------跳转到节目编辑页-----------**/
+            }break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

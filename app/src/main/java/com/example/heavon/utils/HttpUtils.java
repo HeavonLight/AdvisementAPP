@@ -22,6 +22,7 @@ public class HttpUtils {
     private RequestQueue mQuene;
     private Map<String, String> mParams;
     private JSONObject mJsonParams;
+    private static String hostIP = "139.129.229.213";
 
     public HttpUtils() {
         mQuene = App.newInstance().getRequestQueue();
@@ -44,9 +45,17 @@ public class HttpUtils {
      * @return 服务器IP地址
      */
     public static String getHostIP(){
-        String hostIP = "114.115.203.30";
-
+//        String hostIP = "139.129.229.213";
+//        hostIP = "192.168.0.101:8080";
         return hostIP;
+    }
+
+    /**
+     * 设置服务器IP地址
+     * @param ip 服务器IP地址
+     */
+    public static void setHostIP(String ip){
+        hostIP = ip;
     }
 
     /**
@@ -54,7 +63,7 @@ public class HttpUtils {
      * @return 服务器后台地址
      */
     public static String getHost(){
-        String host = "http://114.115.203.30/ad/index.php/Home/";
+        String host = "http://"+ getHostIP() +"/ad/index.php/Home/";
 
         return host;
     }

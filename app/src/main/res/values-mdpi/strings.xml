@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_feed_back">反馈</string>
+    <string name="title_activity_about">关于</string>
+    <string name="title_activity_protocol">协议</string>
+</resources>

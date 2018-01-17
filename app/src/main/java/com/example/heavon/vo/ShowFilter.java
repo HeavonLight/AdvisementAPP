@@ -34,9 +34,18 @@ public class ShowFilter implements Filter<String> {
     }
 
     @Override
-    public void addFilter(String k, String v) {
+    public void put(String k, String v) {
         if (mFilter != null) {
             mFilter.put(k, v);
+        } else {
+            Log.e("showFilter", "mFilter is null.");
+        }
+    }
+
+    @Override
+    public void delete(String k) {
+        if (mFilter != null) {
+            mFilter.remove(k);
         } else {
             Log.e("showFilter", "mFilter is null.");
         }

@@ -6,11 +6,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        
+        <item name="android:listDivider">@drawable/bg_line</item>
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textColorHint">@color/colorTextHint</item>
         <item name="android:borderlessButtonStyle">@color/colorBorder</item>
+
+        <item name="android:actionMenuTextColor">@color/blueBackground</item>
     </style>
 
     <style name="EditText">
@@ -18,13 +21,23 @@
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">15dp</item>
+        <item name="android:textCursorDrawable">@drawable/shape_edit_cursor</item>
     </style>
     <style name="Button">
         <item name="android:background">@drawable/bg_button</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorButton</item>
+    </style>
+    <style name="Button.Circle">
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorButton</item>
+        <item name="android:background">@drawable/bg_button_circle</item>
     </style>
     <style name="Link">
         <item name="android:textColor">@drawable/bg_button_verify</item>
@@ -40,21 +53,66 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
     <style name="ToolBar.Title">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/colorTextTitle</item>
         <item name="android:textSize">16sp</item>
     </style>
     <style name="Text">
         <item name="android:textColor">@color/colorText</item>
         <item name="android:textSize">14sp</item>
     </style>
+    <style name="Text.Person">
+        <item name="android:textColor">#FF2F3336</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:alpha">0.87</item>
+    </style>
     <style name="Text.Search">
         <item name="android:textColor">@color/colorSearch</item>
         <item name="android:textSize">14sp</item>
     </style>
     <style name="TextTitle">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/colorTextTitle</item>
         <item name="android:textSize">20sp</item>
     </style>
+    <style name="Text.Indicator">
+        <item name="android:textColor">@color/text_indicator</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="Indicator">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textColor">@color/text_indicator</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TypeShowTitle">
+        <item name="android:textColor">@color/colorTypeShowTitle</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="ShowDetailsTitle">
+        <item name="android:textColor">@color/colorTextTitle</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="ShowName">
+        <item name="android:textColor">@color/colorTextTitle</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="PersonItem">
+        <item name="android:layout_marginTop">@dimen/margin_body</item>
+        <item name="android:layout_marginBottom">@dimen/margin_body</item>
+    </style>
+    <style name="ShowSummaryEdit">
+        <item name="android:gravity">top</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textColorHint">@color/colorSummaryHint</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <!--登录加载弹窗-->
     <style name="loginingDlg" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsFloating">true</item>
         <!-- 设置窗口浮动 -->
@@ -68,6 +126,40 @@
         <!-- 是否模糊 -->
         <item name="android:windowIsTranslucent">true</item>
         <!-- 半透明 -->
+    </style>
+
+    <!--网页加载弹窗-->
+    <style name="loadingDlg" parent="android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <!-- 设置窗口浮动 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 设置无边框 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 设置无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 设置背景颜色 透明 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 是否模糊 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+    </style>
+
+    <!--节目简介编辑窗口-->
+    <style name="summaryDlg" parent="android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <!-- 设置窗口浮动 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 设置无边框 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 设置无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 设置背景颜色 透明 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 是否模糊 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- 设置全屏 -->
     </style>
 
 </resources>

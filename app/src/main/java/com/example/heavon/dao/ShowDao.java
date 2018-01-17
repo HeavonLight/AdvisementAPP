@@ -12,6 +12,8 @@ import com.example.heavon.vo.Show;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.heavon.vo.Type;
+import com.mob.tools.network.HttpResponseCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,6 @@ import java.util.Map;
 
 public class ShowDao extends BaseDao {
 
-
     /**
      * 根据筛选条件初始化节目列表
      *
@@ -33,19 +34,9 @@ public class ShowDao extends BaseDao {
      * @return
      */
     public void initShowsByFilter(ShowFilter filter, final HttpResponse<Map<String, Object>> response) {
-
         List<Show> showList = new ArrayList<Show>();
-
-//        if(queue == null){
-//            Log.e("showDao", "queue is null");
-//            return ;
-//        }
-
         HttpUtils http = new HttpUtils();
         String getShowsUrl = http.getHost() + "Show/getShows";
-//        if(!filter.isEmpty()){
-//            getShowsUrl += filter.parseFilterToURL();
-//        }
 
         http.postString(getShowsUrl, new Response.Listener<String>() {
             @Override
@@ -55,7 +46,6 @@ public class ShowDao extends BaseDao {
                 Boolean responseError;
                 try {
                     json = JSON.parseObject(s);
-                    Log.e("showshow", "here");
                     responseError = json.getBoolean("error");
                     returnMap.put("error", responseError);
                     if (responseError) {
@@ -65,15 +55,13 @@ public class ShowDao extends BaseDao {
                         }
                         returnMap.put("msg", msg);
                     } else {
-                        //
+                        //节目列表数据
                         JSONArray dataList = json.getJSONArray("data");
-                        Log.e("showDao", dataList.toString());
                         String dataListString = JSON.toJSONString(dataList);
                         Log.e("showList", dataListString);
                         List<Show> showList = JSON.parseArray(dataListString, Show.class);
 
                         returnMap.put("showList", showList);
-                        //
                     }
                 } catch (Exception e) {
                     Log.e("showError", e.getMessage());
@@ -91,10 +79,91 @@ public class ShowDao extends BaseDao {
 
     }
 
+    /**
+     * 获取节目详情页的URL
+     * @param id 节目id
+     * @return 节目详情url链接
+     */
     public String getShowUrlById(int id) {
         String showUrl = HttpUtils.getHost() + "Show/getShow/id/" + String.valueOf(id);
 
         return showUrl;
+    }
+
+    /**
+     * 获取节目编辑页的URL
+     * @param id 节目id
+     * @return 节目编辑页的url链接
+     */
+    public String getEditShowUrlById(int id){
+        String editShowUrl = HttpUtils.getHost() + "Show/editShow/id/" + String.valueOf(id);
+
+        return editShowUrl;
+    }
+
+    /**
+     * 获取节目添加页的URL
+     * @return 节目添加页的url链接
+     */
+    public String getAddShowUrl(){
+
+        return HttpUtils.getHost() + "Show/addShow";
+    }
+
+    /**
+     * 获取筛选信息列表
+     * @param filter    筛选信息名称
+     * @param response  回调方法
+     */
+    public void getFilterList(String filter, final HttpResponse<Map<String, Object>> response){
+
+        HttpUtils http = new HttpUtils();
+        String filtersUrl = http.getHost() + "Show/getFilters";
+        ShowFilter showFilter = new ShowFilter("filter", filter);
+
+        http.postString(filtersUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Map<String, Object> returnMap = new HashMap<String, Object>();
+                JSONObject json;
+                Boolean responseError;
+                try {
+                    json = JSON.parseObject(s);
+                    responseError = json.getBoolean("error");
+                    returnMap.put("error", responseError);
+                    if (responseError) {
+                        String msg = json.getString("data");
+                        if ("必须用post方式".equals(msg)) {
+                            msg = "请求链接失效";
+                        }
+                        returnMap.put("msg", msg);
+                    } else {
+                        //
+                        JSONArray dataList = json.getJSONArray("data");
+
+                        Log.e("showDao", dataList.toString());
+                        String dataListString = JSON.toJSONString(dataList);
+                        Log.e("showList", dataListString);
+                        List<Type> list = JSON.parseArray(dataListString, Type.class);
+//                        List<String> filterList = new ArrayList<String>();
+//                        for(int i = 0; i < list.size(); i++){
+//                            filterList.put( list.get(i).get("name").toString() );
+//                        }
+                        returnMap.put("filterList", list);
+                        //
+                    }
+                } catch (Exception e) {
+                    e.getStackTrace();
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("error", true);
+                    map.put("msg", e.getMessage());
+                    returnMap = map;
+                }
+                Log.e("show", returnMap.toString());
+                //将returnMap作为参数回调
+                response.getHttpResponse(returnMap);
+            }
+        }, showFilter.getFilter());
     }
 
     public Show getShowById(int id) {

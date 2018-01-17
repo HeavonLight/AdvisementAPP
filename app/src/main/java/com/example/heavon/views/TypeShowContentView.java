@@ -4,6 +4,7 @@ package com.example.heavon.views;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.heavon.myapplication.R;
 import com.example.heavon.myapplication.ShowActivity;
+import com.example.heavon.utils.DensityUtil;
 import com.example.heavon.vo.Show;
 import com.squareup.picasso.Picasso;
 
@@ -26,10 +28,13 @@ import com.squareup.picasso.Picasso;
 public class TypeShowContentView extends LinearLayout {
 
     private ImageView mThumbView;
-    private ImageButton mFavoriteButton;
+    private ImageView mFavoriteButton;
     private TextView mInvestmentStatusView;
     private TextView mNameView;
     private TextView mCastView;
+
+    private int imgWidth;
+    private int imgHeight;
 
     public TypeShowContentView(Context context) {
         super(context);
@@ -54,7 +59,7 @@ public class TypeShowContentView extends LinearLayout {
             Log.e("TypeShowContentView", "thumb view is null.");
             return;
         }
-        mFavoriteButton = (ImageButton) findViewById(R.id.bt_favorite);
+        mFavoriteButton = (ImageView) findViewById(R.id.bt_favorite);
 
         mInvestmentStatusView = (TextView) findViewById(R.id.investment_status);
         mNameView = (TextView) findViewById(R.id.name);
@@ -68,13 +73,16 @@ public class TypeShowContentView extends LinearLayout {
             return;
         } else if (show.getThumb() == null || show.getThumb().isEmpty()){
             Log.e("TypeShowContentView", "Show thumb is null.");
-            thumb = "http://s16.sinaimg.cn/large/003gRgrCzy73OGZAV434f&690";
+//            thumb = "http://s16.sinaimg.cn/large/003gRgrCzy73OGZAV434f&690";
+            thumb = "error";
         } else {
             thumb = show.getThumb();
         }
 
         Log.e("initShow", thumb);
-        Picasso.with(getContext()).load(thumb).into(mThumbView);
+        imgWidth = DensityUtil.dip2px(getContext(), 200);
+        imgHeight = DensityUtil.dip2px(getContext(), 124);
+        Picasso.with(getContext()).load(thumb).centerCrop().resize(imgWidth,imgHeight).error(R.drawable.none_img).into(mThumbView);
         mThumbView.setTag(show.getId());
         mThumbView.setOnClickListener(new OnClickListener() {
             @Override
@@ -99,7 +107,18 @@ public class TypeShowContentView extends LinearLayout {
             }
         });
 
+        String investment = show.getInvestment_status();
+        if(TextUtils.equals(investment, "未招商")){
+            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentNot);
+        }else if(TextUtils.equals(investment, "招商结束")){
+            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentEnd);
+        }else if(TextUtils.equals(investment, "招商中")){
+            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentIng);
+        }else if(TextUtils.equals(investment, "执行中")){
+            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentDoing);
+        }
         mInvestmentStatusView.setText(show.getInvestment_status());
+
         mNameView.setText(show.getName());
         mCastView.setText(show.getCast());
     }

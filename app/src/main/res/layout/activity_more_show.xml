@@ -13,8 +13,8 @@
         android:id="@+id/toolbar_basic"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-
         style="@style/ToolBar">
+
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
@@ -26,66 +26,20 @@
             android:text="@string/more_show_title" />
 
     </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/colorLine"
+        android:layout_alignBottom="@+id/toolbar_basic">
 
-    <!--&lt;!&ndash;分类滑动栏&ndash;&gt;-->
-    <!--<ScrollView-->
-        <!--android:id="@+id/lv_shows"-->
-        <!--android:layout_below="@id/toolbar_basic"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<LinearLayout-->
-            <!--android:id="@+id/ll_shows"-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+    </View>
 
-            <!--<TextView-->
-                <!--android:id="@+id/show_none"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:text="@string/prompt_show_none"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:gravity="center"/>-->
-
-        <!--</LinearLayout>-->
-
-
-    <!--</ScrollView>-->
-
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-        <!--android:id="@+id/show_list_swipe"-->
-        <!--android:layout_below="@id/toolbar_basic"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<TextView-->
-            <!--android:id="@+id/show_none"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="@string/prompt_show_none"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:gravity="center"/>-->
-
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/show_recycler_view"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scrollbars="none">-->
-
-
-        <!--</android.support.v7.widget.RecyclerView>-->
-
-    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-
-    <com.andview.refreshview.XRefreshView
+    <FrameLayout
         android:id="@+id/show_list_scroll"
         android:layout_below="@id/toolbar_basic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         >
-
         <TextView
             android:id="@+id/show_none"
             android:layout_width="match_parent"
@@ -94,17 +48,14 @@
             android:layout_gravity="center"
             android:gravity="center"/>
 
-        <android.support.v7.widget.RecyclerView
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/show_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
 
 
-        </android.support.v7.widget.RecyclerView>
-
-
-    </com.andview.refreshview.XRefreshView>
-
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
+    </FrameLayout>
 
 </RelativeLayout>

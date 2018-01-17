@@ -11,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.heavon.gen.DaoMaster;
 import com.example.heavon.gen.DaoSession;
 
+import java.net.CookieStore;
 import java.util.Map;
 
 /**
@@ -29,6 +30,8 @@ public class App extends Application {
     private SQLiteDatabase db;
     private DaoMaster daoMaster;
     private DaoSession daoSession;
+
+    private boolean sessionOn = true;
 
     public static App newInstance() {
         return instance;
@@ -49,15 +52,26 @@ public class App extends Application {
         return requestQueue;
     }
 
+
+    public void setSessionOn(boolean on) {
+        sessionOn = on;
+    }
+
     /**
      * 检查返回的Response header中有没有session
      *
      * @param responseHeaders Response Headers.
      */
     public final void checkSessionCookie(Map<String, String> responseHeaders) {
+        Log.e("test head", responseHeaders.toString());
+        if (!sessionOn) {
+            return;
+        }
         if (responseHeaders.containsKey(SET_COOKIE_KEY) &&
                 responseHeaders.get(SET_COOKIE_KEY).startsWith(SESSION_COOKIE)) {
             String cookie = responseHeaders.get(SET_COOKIE_KEY);
+            Log.e("test cc", cookie);
+
             if (cookie.length() > 0) {
                 String[] splitCookie = cookie.split(";");
                 String[] splitSessionId = splitCookie[0].split("=");
@@ -71,9 +85,15 @@ public class App extends Application {
 
     /**
      * 添加session到Request header中
+     *
+     * @param requestHeaders
      */
     public final void addSessionCookie(Map<String, String> requestHeaders) {
+        if (!sessionOn) {
+            return;
+        }
         String sessionId = preferences.getString(SESSION_COOKIE, "");
+        Log.e("test sse", sessionId);
         if (sessionId.length() > 0) {
             StringBuilder builder = new StringBuilder();
             builder.append(SESSION_COOKIE);
@@ -83,11 +103,25 @@ public class App extends Application {
                 builder.append("; ");
                 builder.append(requestHeaders.get(COOKIE_KEY));
             }
-
-            Log.e("appStart", "cookie error");
+            Log.e("appStart", "session get ");
 
             requestHeaders.put(COOKIE_KEY, builder.toString());
         }
+    }
+
+    /**
+     * 清空session
+     */
+    public final void clearSessionCookie() {
+        if (!sessionOn) {
+            return;
+        }
+        String sessionId = preferences.getString(SESSION_COOKIE, "");
+        Log.e("test delete", sessionId);
+        if (sessionId.length() > 0) {
+            preferences.edit().clear().commit();
+        }
+        Log.e("test delete after", preferences.getString(SESSION_COOKIE, ""));
     }
 
     private void setupDatabase() {

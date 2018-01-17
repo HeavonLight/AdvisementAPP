@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.heavon.constant.Constant;
 import com.example.heavon.dao.UserDao;
 import com.example.heavon.interfaceClasses.HttpResponse;
+import com.example.heavon.myapplication.App;
 import com.example.heavon.myapplication.R;
 
 import java.util.Map;
@@ -25,7 +32,7 @@ import java.util.Map;
  * Use the {@link PersonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PersonFragment extends Fragment {
+public class PersonFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +43,19 @@ public class PersonFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private TextView mLogoutView;
+    //UI preference.
+    private RelativeLayout mLogoutView;
+    private RelativeLayout mLoginView;
+    private RelativeLayout mShowManagerView;
+    private RelativeLayout mShareView;
+    private RelativeLayout mFeedbackView;
+    private RelativeLayout mProtocolView;
+    private RelativeLayout mAboutView;
+    private Button mAddShowButton;
+    private TextView mAuthorityView;
+
+    private UserDao mUserDao;
+
 
     public PersonFragment() {
         // Required empty public constructor
@@ -74,28 +93,62 @@ public class PersonFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_person, container, false);
+        mUserDao = new UserDao();
 
-        mLogoutView = (TextView) view.findViewById(R.id.person_logout);
-        mLogoutView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserDao userDao = new UserDao();
-                userDao.logout(new HttpResponse<Map<String, Object>>() {
-                    @Override
-                    public void getHttpResponse(Map<String, Object> result) {
-                        String msg = (String) result.get("msg");
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        if (mListener != null) {
-                            //清空本地登录
-                            SharedPreferences sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                            sp.edit().clear().commit();
-                            mListener.logout();
-                        }
-                    }
-                });
+        mLogoutView = (RelativeLayout) view.findViewById(R.id.person_logout);
+        mLogoutView.setOnClickListener(this);
 
-            }
-        });
+        mLoginView = (RelativeLayout) view.findViewById(R.id.person_login);
+        mLoginView.setOnClickListener(this);
+
+        mShowManagerView = (RelativeLayout) view.findViewById(R.id.show_manager);
+        mShowManagerView.setOnClickListener(this);
+
+        mShareView = (RelativeLayout) view.findViewById(R.id.share);
+        mShareView.setOnClickListener(this);
+
+        mFeedbackView = (RelativeLayout) view.findViewById(R.id.feedback);
+        mFeedbackView.setOnClickListener(this);
+
+        mProtocolView = (RelativeLayout) view.findViewById(R.id.protocol);
+        mProtocolView.setOnClickListener(this);
+
+        mAboutView = (RelativeLayout) view.findViewById(R.id.person_about);
+        mAboutView.setOnClickListener(this);
+
+        mAddShowButton = (Button) view.findViewById(R.id.add_show_button);
+        mAddShowButton.setOnClickListener(this);
+
+        mAuthorityView = (TextView) view.findViewById(R.id.authority);
+
+        Log.e("personFragment",mUserDao.checkLogin(getContext())+"");
+        if (mUserDao.checkLogin(getContext())) {
+            mLoginView.setVisibility(View.GONE);
+            mLogoutView.setVisibility(View.VISIBLE);
+            TextView nameTv = (TextView) view.findViewById(R.id.name);
+            nameTv.setText(mUserDao.getUserName(getContext()));
+        } else {
+            mLoginView.setVisibility(View.VISIBLE);
+            mLogoutView.setVisibility(View.GONE);
+        }
+
+        Log.e("personFragment",mUserDao.getLevel(getContext())+"");
+        int level = mUserDao.getLevel(getContext());
+        if (level == Constant.LEVEL_NORMAL) {
+            mAuthorityView.setText("普通用户");
+            mAuthorityView.setVisibility(View.VISIBLE); //显示普通用户
+        } else if (level == Constant.LEVEL_MEDIA) {
+            mAuthorityView.setText("媒体用户");
+            mAuthorityView.setVisibility(View.VISIBLE); //显示媒体用户
+        } else if (level >= Constant.LEVEL_MANAGER) {
+            mShowManagerView.setVisibility(View.VISIBLE);   //显示管理节目按钮
+            mAddShowButton.setVisibility(View.VISIBLE); //显示添加节目按钮
+            mAuthorityView.setText("管理员");
+            mAuthorityView.setVisibility(View.VISIBLE); //显示管理员
+        } else {
+            mShowManagerView.setVisibility(View.GONE);
+            mAddShowButton.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -123,6 +176,59 @@ public class PersonFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.add_show_button:{
+                //跳转到添加节目
+                mListener.addShow();
+            }break;
+            case R.id.person_login:{
+                mListener.login();
+            }break;
+            case R.id.person_logout:{
+                mUserDao.logout(new HttpResponse<Map<String, Object>>() {
+                    @Override
+                    public void getHttpResponse(Map<String, Object> result) {
+                        String msg = (String) result.get("msg");
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        if (mListener != null) {
+                            //清空本地登录
+                            SharedPreferences sp = getContext().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                            sp.edit().clear().commit();
+                            //清空session
+                            App.newInstance().clearSessionCookie();
+                            mListener.login();
+                        }
+                    }
+                });
+            }break;
+            case R.id.show_manager:{
+                mListener.manageShow();
+            }break;
+            case R.id.share:{
+//                mListener.share();
+            }break;
+            case R.id.feedback:{
+//                mListener.feedback();
+            }break;
+            case R.id.protocol:{
+//                mListener.protocol();
+            }break;
+            case R.id.person_about:{
+//                mListener.about();
+            }break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+
+        super.onHiddenChanged(hidden);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -136,7 +242,12 @@ public class PersonFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
-        void logout();
+        void login();
+        void addShow();
+        void manageShow();
+        void feedback();
+        void about();
+        void share();
+        void protocol();
     }
 }

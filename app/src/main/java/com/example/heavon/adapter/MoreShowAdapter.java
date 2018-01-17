@@ -27,6 +27,7 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
     private Context context;
     private List<Show> list;
     private int largeCardHeight, smallCardHeight;
+    private int imgWidth, imgHeight;
 
     public MoreShowAdapter(List<Show> list, Context context) {
         this.list = list;
@@ -38,7 +39,8 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
     @Override
     public void onBindViewHolder(final MoreShowAdapterViewHolder holder, int position, boolean isItem) {
         Show show = list.get(position);
-        String thumb = "http://s16.sinaimg.cn/large/003gRgrCzy73OGZAV434f&690";
+//        String thumb = "http://s16.sinaimg.cn/large/003gRgrCzy73OGZAV434f&690";
+        String thumb = "error";
         if(show != null && show.getThumb() != null && !show.getThumb().isEmpty()){
             thumb = show.getThumb();
         }else{
@@ -46,7 +48,7 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
         }
         Log.e("initShow", show.toString());
 
-        Picasso.with(context).load(thumb).into(holder.thumbIv);
+        Picasso.with(context).load(thumb).error(R.drawable.none_img).into(holder.thumbIv);
         holder.thumbIv.setTag(show.getId());
         holder.thumbIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,9 +102,7 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
 
     @Override
     public MoreShowAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType, boolean isItem) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.view_type_show_content, parent, false);
-        v.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_more_show_content, parent, false);
         MoreShowAdapterViewHolder vh = new MoreShowAdapterViewHolder(v, true);
         return vh;
     }
@@ -123,7 +123,7 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
 
         public View rootView;
         public ImageView thumbIv;
-        public ImageButton favoriteBt;
+        public ImageView favoriteBt;
         public TextView investmentTv;
         public TextView nameTv;
         public TextView castTv;
@@ -134,7 +134,7 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
             if (isItem) {
                 thumbIv = (ImageView) itemView
                         .findViewById(R.id.thumb);
-                favoriteBt = (ImageButton) itemView
+                favoriteBt = (ImageView) itemView
                         .findViewById(R.id.bt_favorite);
                 investmentTv = (TextView) itemView
                         .findViewById(R.id.investment_status);

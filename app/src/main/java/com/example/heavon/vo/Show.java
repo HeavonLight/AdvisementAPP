@@ -18,11 +18,11 @@ public class Show {
     private String tv_platform;
     private String equity_type;
     private int year;
-    private int quarter;
-    private Date expected_tv_startdate;
-    private Date expected_tv_enddate;
-    private Date start_date;
-    private Date end_date;
+    private String quarter;
+    private String expected_tv_startdate;
+    private String expected_tv_enddate;
+    private String start_date;
+    private String end_date;
     private String summary;
     private String thumb;
     private String cast;
@@ -125,43 +125,43 @@ public class Show {
         this.year = year;
     }
 
-    public int getQuarter() {
+    public String getQuarter() {
         return quarter;
     }
 
-    public void setQuarter(int quarter) {
+    public void setQuarter(String quarter) {
         this.quarter = quarter;
     }
 
-    public Date getExpected_tv_startdate() {
+    public String getExpected_tv_startdate() {
         return expected_tv_startdate;
     }
 
-    public void setExpected_tv_startdate(Date expected_tv_startdate) {
+    public void setExpected_tv_startdate(String expected_tv_startdate) {
         this.expected_tv_startdate = expected_tv_startdate;
     }
 
-    public Date getExpected_tv_enddate() {
+    public String getExpected_tv_enddate() {
         return expected_tv_enddate;
     }
 
-    public void setExpected_tv_enddate(Date expected_tv_enddate) {
+    public void setExpected_tv_enddate(String expected_tv_enddate) {
         this.expected_tv_enddate = expected_tv_enddate;
     }
 
-    public Date getStart_date() {
+    public String getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(Date start_date) {
+    public void setStart_date(String start_date) {
         this.start_date = start_date;
     }
 
-    public Date getEnd_date() {
+    public String getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(Date end_date) {
+    public void setEnd_date(String end_date) {
         this.end_date = end_date;
     }
 
