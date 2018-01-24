@@ -280,6 +280,18 @@ public class UserDao extends BaseDao {
     }
 
     /**
+     * 获取用户ID
+     *
+     * @param context 当前上下文
+     * @return 用户ID
+     */
+    public int getUid(Context context){
+        SharedPreferences sp = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        int uid = sp.getInt("USER_ID", 0);
+        return uid;
+    }
+
+    /**
      * 获取用户权限等级
      *
      * @param context 当前上下文

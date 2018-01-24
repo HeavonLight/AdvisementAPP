@@ -53,7 +53,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends BasicActivity {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -91,9 +91,9 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-//        mQueue = Volley.newRequestQueue(LoginActivity.this);
         mSp = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         mLoginSp = this.getSharedPreferences("userLogin", Context.MODE_PRIVATE);
         mDlgUtils = new DlgUtils(this);
@@ -105,7 +105,6 @@ public class LoginActivity extends Activity {
     //初始化UI
     public void initUI() {
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
-//        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -155,61 +154,6 @@ public class LoginActivity extends Activity {
         });
         //初始化正在登录框
         mDlgUtils.initDlg(R.style.loginingDlg, R.layout.logining_dlg);
-    }
-
-    //进入到注册页面
-    public void enterRegister() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        LoginActivity.this.startActivity(intent);
-    }
-
-    //进入到忘记密码页面
-    public void enterFindPassword() {
-        Intent intent = new Intent(LoginActivity.this, FindPasswordActivity.class);
-        LoginActivity.this.startActivity(intent);
-    }
-
-    //跳转到主页面
-    public void gotoMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        this.startActivity(intent);
-        this.finish();
-    }
-//
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
-//
-//        if (VERSION.SDK_INT >= 14) {
-//            // Use ContactsContract.Profile (API 14+)
-//            getLoaderManager().initLoader(0, null, this);
-//        } else if (VERSION.SDK_INT >= 8) {
-//            // Use AccountManager (API 8+)
-//            new SetupEmailAutoCompleteTask().execute(null, null);
-//        }
-//    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mUsernameView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
     }
 
 //    /**
@@ -300,8 +244,6 @@ public class LoginActivity extends Activity {
                 }
             });
 //            showProgress(true);
-//            mAuthTask = new UserLoginTask(username, password);
-//            mAuthTask.execute((Void) null);
         }
     }
 
@@ -338,55 +280,6 @@ public class LoginActivity extends Activity {
 //            // and hide the relevant UI components.
 //            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//        }
-//    }
-
-//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-//        ArrayAdapter<String> adapter =
-//                new ArrayAdapter<>(LoginActivity.this,
-//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-//
-//        mUsernameView.setAdapter(adapter);
-//    }
-//
-//    private interface ProfileQuery {
-//        String[] PROJECTION = {
-//                ContactsContract.CommonDataKinds.Email.ADDRESS,
-//                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-//        };
-//
-//        int ADDRESS = 0;
-//        int IS_PRIMARY = 1;
-//    }
-//
-//    /**
-//     * Use an AsyncTask to fetch the user's email addresses on a background thread, and update
-//     * the email text field with results on the main UI thread.
-//     */
-//    class SetupEmailAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
-//
-//        @Override
-//        protected List<String> doInBackground(Void... voids) {
-//            ArrayList<String> emailAddressCollection = new ArrayList<>();
-//
-//            // Get all emails from the user's contacts and copy them to a list.
-//            ContentResolver cr = getContentResolver();
-//            Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
-//                    null, null, null);
-//            while (emailCur.moveToNext()) {
-//                String email = emailCur.getString(emailCur.getColumnIndex(ContactsContract
-//                        .CommonDataKinds.Email.DATA));
-//                emailAddressCollection.put(email);
-//            }
-//            emailCur.close();
-//
-//            return emailAddressCollection;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<String> emailAddressCollection) {
-//            addEmailsToAutoComplete(emailAddressCollection);
 //        }
 //    }
 }

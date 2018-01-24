@@ -33,6 +33,7 @@
 
     <color name="colorSummaryHint">#E0E0E0</color>
 
+    <color name="colorInvestmentNone">#FF29A1F7</color>
     <color name="colorInvestmentNot">#FFE0E0E0</color>
     <color name="colorInvestmentIng">#FF29A1F7</color>
     <color name="colorInvestmentEnd">#FFA1A6A9</color>

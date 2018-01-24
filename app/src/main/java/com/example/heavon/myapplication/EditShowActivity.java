@@ -83,7 +83,6 @@ public class EditShowActivity extends BasicActivity {
             Log.e("showEditActivity", url);
             mShowBoxWeb.loadUrl(url);
         }
-        Toast.makeText(this, "id = " + mSid, Toast.LENGTH_SHORT).show();
 
         initToolBar(null);
     }

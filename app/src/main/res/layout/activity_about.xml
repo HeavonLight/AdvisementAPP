@@ -8,6 +8,70 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.AboutActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_basic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        style="@style/ToolBar">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            style="@style/ToolBar.Title"
+            android:text="@string/about_title" />
+    </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:background="@color/colorLine"
+        android:layout_alignBottom="@+id/toolbar_basic">
+
+    </View>
+
+    <TextView
+        android:layout_marginTop="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App 图标"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:paddingBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/app_icon"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@color/colorBase"
+            android:alpha="0.87"
+            android:text="大内密探"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我是你的媒体密探"
+            android:textColor="@color/colorBase"
+            android:alpha="0.54"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

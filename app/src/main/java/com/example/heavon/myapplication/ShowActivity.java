@@ -1,33 +1,23 @@
 package com.example.heavon.myapplication;
 
 import android.content.Intent;
-import android.content.res.ObbInfo;
-import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.example.heavon.constant.Constant;
 import com.example.heavon.dao.ShowDao;
 import com.example.heavon.dao.UserDao;
-import com.example.heavon.utils.DlgUtils;
-import com.example.heavon.utils.HttpUtils;
 import com.example.heavon.views.ShowWebView;
-import com.example.heavon.vo.Show;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 
+/**
+ * 节目详情页
+ */
 public class ShowActivity extends BasicActivity {
 
     private int mSid = 0;
@@ -69,7 +59,7 @@ public class ShowActivity extends BasicActivity {
             Log.e("showActivity", url);
             mShowBoxWeb.loadUrl(url);
         }
-        Toast.makeText(this, "id = "+mSid, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "id = "+mSid, Toast.LENGTH_SHORT).show();
 
         initToolBar(null);
     }

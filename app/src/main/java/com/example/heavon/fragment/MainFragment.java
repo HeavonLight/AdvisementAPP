@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.heavon.adapter.RollLoopAdapter;
@@ -40,22 +43,22 @@ import java.util.Map;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+/**
+ * 首页界面
+ */
 public class MainFragment extends Fragment{
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     //UI reference.
     private RollPagerView mRollViewPager;
     private OnFragmentInteractionListener mListener;
-//    private ScrollView mShowsScrollView;
+    private ScrollView mShowsScrollView;
     private LinearLayout mShowsView;
-//    private EditText mSearchEdit;
     private RelativeLayout mSearchView;
 
 
@@ -93,10 +96,27 @@ public class MainFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //设置视图
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
         //初始化搜索栏
         mSearchView = (RelativeLayout) view.findViewById(R.id.search_box);
+        initSearch();
+
+        //初始化推荐轮播图
+        mRollViewPager = (RollPagerView) view.findViewById(R.id.roll_view_pager);
+        initRecommand();
+
+        //初始化主页节目列表
+        mShowsView = (LinearLayout) view.findViewById(R.id.ll_shows);
+        mShowsScrollView = (ScrollView) view.findViewById(R.id.lv_shows);
+        initTypeShows();
+
+        return view;
+    }
+
+    //初始化搜索栏
+    public void initSearch(){
         mSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,14 +125,6 @@ public class MainFragment extends Fragment{
                 }
             }
         });
-
-        mRollViewPager = (RollPagerView) view.findViewById(R.id.roll_view_pager);
-        initRecommand();
-//        mShowsScrollView = (ScrollView) view.findViewById(R.id.lv_shows);
-
-        mShowsView = (LinearLayout) view.findViewById(R.id.ll_shows);
-        initTypeShows();
-        return view;
     }
 
     //初始化主页节目列表
@@ -180,7 +192,6 @@ public class MainFragment extends Fragment{
                             bundle.putInt("sid", showList.get(position).getId());
                             intent.putExtras(bundle);
                             getContext().startActivity(intent);
-//                Toast.makeText(getContext(), "click show "+view.getTag(), Toast.LENGTH_SHORT).show();
                             /**----------跳转到节目详情页-----------**/
 //                            Toast.makeText(getContext(),"Item "+position+" clicked",Toast.LENGTH_SHORT).show();
                         }

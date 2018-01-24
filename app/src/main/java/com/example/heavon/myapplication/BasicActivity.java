@@ -10,11 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.smssdk.SMSSDK;
 
@@ -25,6 +27,31 @@ public class BasicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SMSSDK.initSDK(this, "19accee5f0490", "96545bc0dfb6f782602717bb863a9464");
         initWindowStatusBar();
+    }
+
+    private long temptime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)//主要是对这个函数的复写
+    {
+        // TODO Auto-generated method stub
+
+        if((keyCode == KeyEvent.KEYCODE_BACK)&&(event.getAction() == KeyEvent.ACTION_DOWN))
+        {
+            if(isTaskRoot()){
+                if(System.currentTimeMillis() - temptime >2000) // 2s内再次选择back键有效
+                {
+                    System.out.println(Toast.LENGTH_LONG);
+                    Toast.makeText(this, "再按一次返回退出", Toast.LENGTH_SHORT).show();
+                    temptime = System.currentTimeMillis();
+                    return true;
+                }
+                else {
+                    finish();
+                    System.exit(0); //凡是非零都表示异常退出!0表示正常退出!
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     //初始化顶部工具栏
@@ -64,6 +91,10 @@ public class BasicActivity extends AppCompatActivity {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                //设置状态栏颜色
+//                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+                //设置导航栏透明
 //                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
                 //底部导航栏
@@ -133,6 +164,18 @@ public class BasicActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
         this.finish();
+    }
+
+    //进入到注册页面
+    public void enterRegister() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        this.startActivity(intent);
+    }
+
+    //进入到忘记密码页面
+    public void enterFindPassword() {
+        Intent intent = new Intent(this, FindPasswordActivity.class);
+        this.startActivity(intent);
     }
 
     //跳转到登录页面

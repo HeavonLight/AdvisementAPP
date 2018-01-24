@@ -210,13 +210,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 //                mListener.share();
             }break;
             case R.id.feedback:{
-//                mListener.feedback();
+                mListener.feedback();
             }break;
             case R.id.protocol:{
 //                mListener.protocol();
             }break;
             case R.id.person_about:{
-//                mListener.about();
+                mListener.about();
             }break;
             default:
                 break;

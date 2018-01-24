@@ -4,17 +4,16 @@ package com.example.heavon.views;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.heavon.dao.ShowDao;
 import com.example.heavon.myapplication.R;
 import com.example.heavon.myapplication.ShowActivity;
 import com.example.heavon.utils.DensityUtil;
@@ -108,16 +107,8 @@ public class TypeShowContentView extends LinearLayout {
         });
 
         String investment = show.getInvestment_status();
-        if(TextUtils.equals(investment, "未招商")){
-            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentNot);
-        }else if(TextUtils.equals(investment, "招商结束")){
-            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentEnd);
-        }else if(TextUtils.equals(investment, "招商中")){
-            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentIng);
-        }else if(TextUtils.equals(investment, "执行中")){
-            mInvestmentStatusView.setBackgroundResource(R.color.colorInvestmentDoing);
-        }
-        mInvestmentStatusView.setText(show.getInvestment_status());
+        mInvestmentStatusView.setBackgroundResource((new ShowDao()).getInvestmentColor(investment));
+        mInvestmentStatusView.setText(investment);
 
         mNameView.setText(show.getName());
         mCastView.setText(show.getCast());

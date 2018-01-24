@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.FeedbackActivity">
 
     <RelativeLayout

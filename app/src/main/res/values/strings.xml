@@ -62,6 +62,7 @@
     <string name="person_feedback">意见反馈</string>
     <string name="person_protocol">用户协议</string>
     <string name="person_about">关于</string>
+    <string name="about_title">关于</string>
     <string name="type_title">分类</string>
     <string name="edit_show_title">填写节目信息</string>
     <string name="edit_summary_title">填写简介</string>
@@ -84,4 +85,8 @@
     <string name="title_activity_feed_back">反馈</string>
     <string name="title_activity_about">关于</string>
     <string name="title_activity_protocol">协议</string>
+    <string name="textShowInvestmentNone">招商中</string>
+    <string name="textShowNameNone">欢乐颂</string>
+    <string name="textShowCastNone">黄磊</string>
+    <string name="string_logo">程序图标</string>
 </resources>

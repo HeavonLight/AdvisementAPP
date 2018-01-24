@@ -39,12 +39,12 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
-            android:background="@color/blueBackground"
+            android:background="@color/colorInvestmentNone"
             android:paddingLeft="6dp"
             android:paddingRight="6dp"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:text="正在招商中"/>
+            android:text="@string/textShowInvestmentNone"/>
         <TextView
             android:id="@+id/name"
             android:layout_marginLeft="8dp"
@@ -54,7 +54,7 @@
             android:textAlignment="center"
             style="@style/ShowName"
             android:textSize="20sp"
-            android:text="欢乐颂"/>
+            android:text="@string/textShowNameNone"/>
     </LinearLayout>
 
     <TextView
@@ -65,6 +65,6 @@
         android:layout_gravity="start|center_vertical"
         android:textColor="@color/colorText"
         android:textSize="16sp"
-        android:text="黄磊"/>
+        android:text="@string/textShowCastNone"/>
 
 </LinearLayout>

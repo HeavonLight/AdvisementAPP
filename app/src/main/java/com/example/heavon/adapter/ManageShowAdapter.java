@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.example.heavon.dao.ShowDao;
 import com.example.heavon.myapplication.R;
 import com.example.heavon.myapplication.ShowActivity;
 import com.example.heavon.utils.DensityUtil;
@@ -80,7 +81,10 @@ public class ManageShowAdapter extends BaseRecyclerAdapter<ManageShowAdapter.Man
                 /**----------跳转到节目详情页-----------**/
             }
         });
-        holder.investmentTv.setText(show.getInvestment_status());
+
+        String investment = show.getInvestment_status();
+        holder.investmentTv.setBackgroundResource((new ShowDao()).getInvestmentColor(investment));
+        holder.investmentTv.setText(investment);
         holder.nameTv.setText(show.getName());
         holder.distributionPlatformTv.setText(context.getString(R.string.title_distribution_platform) + show.getDistribution_platform());
         holder.companyTv.setText(show.getCompany());

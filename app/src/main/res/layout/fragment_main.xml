@@ -44,20 +44,6 @@
                 android:textSize="12sp"/>
         </RelativeLayout>
 
-        <!--<EditText-->
-            <!--android:id="@+id/search"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@drawable/bg_search_background"-->
-            <!--android:drawableLeft="@mipmap/search"-->
-            <!--android:hint="@string/prompt_search_long"-->
-            <!--android:inputType="text"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingBottom="5dp"-->
-            <!--android:paddingTop="5dp"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textSize="12sp" />-->
-
     </RelativeLayout>
 
     <!--分类滑动栏-->
@@ -70,15 +56,16 @@
         <LinearLayout
             android:id="@+id/ll_shows"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_body"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <!--推荐栏-->
             <com.jude.rollviewpager.RollPagerView
                 android:id="@+id/roll_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="147dp"
+                android:layout_marginTop="@dimen/margin_body"
                 app:rollviewpager_play_delay="3000" />
+
 
         </LinearLayout>
 

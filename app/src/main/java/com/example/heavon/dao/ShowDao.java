@@ -1,11 +1,13 @@
 package com.example.heavon.dao;
 
+import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.example.heavon.interfaceClasses.HttpResponse;
+import com.example.heavon.myapplication.R;
 import com.example.heavon.vo.ShowFilter;
 import com.example.heavon.utils.HttpUtils;
 import com.example.heavon.vo.Show;
@@ -13,7 +15,6 @@ import com.example.heavon.vo.Show;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.heavon.vo.Type;
-import com.mob.tools.network.HttpResponseCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -183,5 +184,23 @@ public class ShowDao extends BaseDao {
 
 
         return favoriteList;
+    }
+
+    /**
+     * 获取招商状态背景颜色
+     * @param investment    招商状态
+     * @return              招商状态背景颜色
+     */
+    public @DrawableRes int getInvestmentColor(String investment){
+        if(TextUtils.equals(investment, "未招商")){
+            return R.color.colorInvestmentNot;
+        }else if(TextUtils.equals(investment, "招商结束")){
+            return R.color.colorInvestmentEnd;
+        }else if(TextUtils.equals(investment, "招商中")){
+            return R.color.colorInvestmentIng;
+        }else if(TextUtils.equals(investment, "待定")){
+            return R.color.colorInvestmentDoing;
+        }
+        return R.color.colorInvestmentNone;
     }
 }

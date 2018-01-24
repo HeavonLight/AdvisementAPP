@@ -9,12 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
+import com.example.heavon.dao.ShowDao;
 import com.example.heavon.myapplication.R;
 import com.example.heavon.myapplication.ShowActivity;
 import com.example.heavon.utils.DensityUtil;
@@ -39,7 +39,6 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
     @Override
     public void onBindViewHolder(final MoreShowAdapterViewHolder holder, int position, boolean isItem) {
         Show show = list.get(position);
-//        String thumb = "http://s16.sinaimg.cn/large/003gRgrCzy73OGZAV434f&690";
         String thumb = "error";
         if(show != null && show.getThumb() != null && !show.getThumb().isEmpty()){
             thumb = show.getThumb();
@@ -59,11 +58,13 @@ public class MoreShowAdapter extends BaseRecyclerAdapter<MoreShowAdapter.MoreSho
                 bundle.putInt("sid", (int)holder.thumbIv.getTag());
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-//                Toast.makeText(context, "click show "+holder.thumbIv.getTag(), Toast.LENGTH_SHORT).show();
                 /**----------跳转到节目详情页-----------**/
             }
         });
-        holder.investmentTv.setText(show.getInvestment_status());
+
+        String investment = show.getInvestment_status();
+        holder.investmentTv.setBackgroundResource((new ShowDao()).getInvestmentColor(investment));
+        holder.investmentTv.setText(investment);
         holder.nameTv.setText(show.getName());
         holder.castTv.setText(show.getCast());
         holder.favoriteBt.setOnClickListener(new View.OnClickListener() {

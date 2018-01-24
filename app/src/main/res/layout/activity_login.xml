@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     tools:context="com.example.heavon.myapplication.LoginActivity">
@@ -25,91 +21,124 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
+        android:fillViewport="true"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
         android:paddingTop="60dp">
 
-        <LinearLayout
-            android:id="@+id/phone_login_form"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/logo"
-                android:layout_gravity="center_horizontal"/>
-
-            <AutoCompleteTextView
-                android:id="@+id/username"
-                android:layout_marginTop="80dp"
-                android:background="@drawable/bg_edittext"
-                style="@style/EditText"
+            <LinearLayout
+                android:id="@+id/phone_login_form"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/edittext_height"
-                android:hint="@string/prompt_username"
-                android:inputType="phone"
-                android:maxLines="1"
-                android:singleLine="true" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
-            <EditText
-                android:id="@+id/password"
-                android:layout_marginTop="@dimen/edittext_marginTop"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edittext_height"
-                style="@style/EditText"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:hint="@string/prompt_password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="50dp"
+                    android:src="@drawable/logo"
+                    android:contentDescription="@string/string_logo"
+                    android:layout_gravity="center_horizontal"/>
 
-            <Button
-                android:id="@+id/bt_login"
-                style="@style/Button.Circle"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edittext_height"
-                android:layout_marginTop="20dp"
-                android:text="@string/action_sign_in_short" />
+                <AutoCompleteTextView
+                    android:id="@+id/username"
+                    android:layout_marginTop="110dp"
+                    android:background="@drawable/bg_edittext"
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    android:hint="@string/prompt_username"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_marginTop="@dimen/edittext_marginTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edittext_height"
+                    style="@style/EditText"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:hint="@string/prompt_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
                 <Button
-                    android:id="@+id/bt_link_find_password"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/bt_login"
+                    style="@style/Button.Circle"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/edittext_height"
-                    style="@style/Link"
-                    android:text="@string/link_forgetpwd_short"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_marginTop="@dimen/button_marginTop"
+                    android:text="@string/action_sign_in_short" />
 
-                <Button
-                    android:id="@+id/bt_link_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/edittext_height"
-                    style="@style/Link"
-                    android:text="@string/link_register"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/bt_link_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingTop="@dimen/link_margin"
+                        android:paddingLeft="0dp"
+                        android:paddingStart="0dp"
+                        android:paddingRight="@dimen/link_margin"
+                        android:paddingEnd="@dimen/link_margin"
+                        android:paddingBottom="@dimen/link_margin"
+                        style="@style/Link"
+                        android:text="@string/link_register"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <Button
+                        android:id="@+id/bt_link_find_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:paddingTop="@dimen/link_margin"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
+                        android:paddingLeft="@dimen/link_margin"
+                        android:paddingStart="@dimen/link_margin"
+                        android:paddingBottom="@dimen/link_margin"
+                        style="@style/Link"
+                        android:text="@string/link_forgetpwd_short"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/link_goto_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                android:textSize="14sp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="@dimen/link_margin"
                 style="@style/Link"
-                android:layout_marginTop="60dp"
+                android:layout_centerInParent="true"
+                android:layout_alignParentBottom="true"
                 android:layout_gravity="center"
                 android:text="@string/bt_link_goto_main" />
 
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>
