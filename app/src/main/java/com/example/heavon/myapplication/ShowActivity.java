@@ -1,11 +1,14 @@
 package com.example.heavon.myapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.heavon.constant.Constant;
@@ -29,6 +32,7 @@ public class ShowActivity extends BasicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
 
@@ -53,15 +57,14 @@ public class ShowActivity extends BasicActivity {
      * 初始化UI
      */
     public void initUI(){
+        initToolBar(null);
+
         mShowBoxWeb = (ShowWebView) findViewById(R.id.show_box_web);
         //加载URL
         if(!url.isEmpty()){
             Log.e("showActivity", url);
             mShowBoxWeb.loadUrl(url);
         }
-//        Toast.makeText(this, "id = "+mSid, Toast.LENGTH_SHORT).show();
-
-        initToolBar(null);
     }
 
     /**
@@ -77,6 +80,25 @@ public class ShowActivity extends BasicActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 全屏状态监听
+     * @param config
+     */
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        switch (config.orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                break;
+        }
     }
 
     @Override

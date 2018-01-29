@@ -58,6 +58,7 @@
             android:label="@string/title_activity_search" />
         <activity
             android:name=".ShowActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:hardwareAccelerated="true"
             android:label="@string/title_activity_show" />
         <activity
@@ -86,6 +87,11 @@
         <activity
             android:name=".ProtocolActivity"
             android:label="@string/title_activity_protocol" />
+        <activity android:name=".TestActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true">
+
+        </activity>
     </application>
 
 </manifest>

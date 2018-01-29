@@ -168,6 +168,7 @@ public class MainFragment extends Fragment{
         ShowFilter filter = new ShowFilter();
         filter.put("perpage", "5");
         filter.put("page", "1");
+        filter.put("order", "thumb !='' desc");
         showDao.initShowsByFilter(filter, new HttpResponse<Map<String, Object>>() {
             @Override
             public void getHttpResponse(Map<String, Object> result) {

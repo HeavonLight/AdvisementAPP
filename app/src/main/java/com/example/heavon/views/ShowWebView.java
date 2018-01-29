@@ -20,16 +20,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.heavon.constant.Constant;
@@ -53,36 +56,43 @@ public class ShowWebView extends WebView{
     private ValueCallback<Uri[]> mValueCallback;
     private ValueCallback<Uri> mUploadMessage;
 
+    private ViewGroup mRootLayout;
+
     public ShowWebView(Context context) {
         super(context);
         if(context instanceof Activity){
-            initialize((Activity)(context));
+            this.activity = (Activity)(context);
+            initialize();
         }
     }
 
     public ShowWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if(context instanceof Activity){
-            initialize((Activity)(context));
+            this.activity = (Activity)(context);
+            initialize();
         }
     }
 
     public ShowWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if(context instanceof Activity){
-            initialize((Activity)(context));
+            this.activity = (Activity)(context);
+            initialize();
         }
     }
 
     public ShowWebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
         super(context, attrs, defStyleAttr, privateBrowsing);
         if(context instanceof Activity){
-            initialize((Activity)(context));
+            this.activity = (Activity)(context);
+            initialize();
         }
     }
 
-    public void initialize(Activity a){
-        this.activity = a;
+    public void initialize(){
+        //获取控件
+        mRootLayout = ((ViewGroup)activity.getWindow().getDecorView().findViewById(android.R.id.content));
         //设置进度条
         mProgressBar = new ProgressBar(activity, null, android.R.attr.progressBarStyleHorizontal);
         mProgressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 5, 0, 0));
@@ -90,18 +100,24 @@ public class ShowWebView extends WebView{
         mProgressBar.setProgressDrawable(drawable);
         addView(mProgressBar);
 
-        super.getSettings().setJavaScriptEnabled(true);
-        super.getSettings().setDefaultTextEncodingName("utf-8");
+        WebSettings settings = super.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDefaultTextEncodingName("utf-8");
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setPluginState(WebSettings.PluginState.ON);
+        settings.setAllowFileAccess(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         handler = new Handler(Looper.getMainLooper());
         //设置js交互
-        addJavascriptInterface(new Object() {
+        Object jsObj = new Object() {
             private Date newDate;
-
             @JavascriptInterface
             public void toast(String msg) {
                 Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
             }
-
             @JavascriptInterface
             public void save() {
                 //保存成功
@@ -109,7 +125,6 @@ public class ShowWebView extends WebView{
                 //跳转返回
                 activity.finish();
             }
-
             @JavascriptInterface
             public void editSummary(@Nullable String summary) {
                 //进入长文本输入
@@ -130,7 +145,6 @@ public class ShowWebView extends WebView{
                 });
                 dlg.showDialog();
             }
-
             @JavascriptInterface
             public Date editDate(@Nullable String dStr) {
                 Date date;
@@ -163,15 +177,20 @@ public class ShowWebView extends WebView{
                 mDateDlg.show();
                 return newDate;
             }
-
             @JavascriptInterface
             public void editName() {
                 //弹出名字名字框
             }
-
-        }, "editObj");
+        };
+        addJavascriptInterface(jsObj, "editObj");
         setWebChromeClient(new ShowWebChromeClient());
         setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 shouldOverrideUrlLoading(view, request);
@@ -191,15 +210,10 @@ public class ShowWebView extends WebView{
     }
 
     public class ShowWebChromeClient extends WebChromeClient{
-
+        private View mCustomView;
+        private CustomViewCallback mCustomViewCallback;
         @Override
         public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//            builder.setTitle("提示").setMessage(message).setPositiveButton("确定", null);
-//            builder.setCancelable(false);
-//            builder.setIcon(R.mipmap.app_icon);
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             result.confirm();
             return true;
@@ -207,16 +221,28 @@ public class ShowWebView extends WebView{
 
         @Override
         public void onShowCustomView(View view, CustomViewCallback callback) {
-            fullscreen();
-            ShowWebView.this.setVisibility(View.GONE);
-            ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            activity.addContentView(view, layoutParams);
             super.onShowCustomView(view, callback);
+            if (mCustomView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+            mCustomView = view;
+            mRootLayout.addView(mCustomView);
+            mCustomViewCallback = callback;
+            ShowWebView.this.setVisibility(View.GONE);
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-
         @Override
         public void onHideCustomView() {
-
+            ShowWebView.this.setVisibility(View.VISIBLE);
+            if (mCustomView == null) {
+                return;
+            }
+            mCustomView.setVisibility(View.GONE);
+            mRootLayout.removeView(mCustomView);
+            mCustomViewCallback.onCustomViewHidden();
+            mCustomView = null;
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             super.onHideCustomView();
         }
 
@@ -228,7 +254,6 @@ public class ShowWebView extends WebView{
             mUploadMessage = uploadMsg;
             String type = TextUtils.isEmpty(acceptType) ? "image/*" : acceptType;
             selectFile(type);
-//            Toast.makeText(activity, "open file", Toast.LENGTH_SHORT).show();
         }
 
         // For Android < 3.0
@@ -269,7 +294,7 @@ public class ShowWebView extends WebView{
             super.onProgressChanged(view, newProgress);
         }
 
-        public void selectFile(String type){
+        private void selectFile(String type){
             Log.e("webview", "选择文件"+type );
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.addCategory(Intent.CATEGORY_OPENABLE);
@@ -311,4 +336,11 @@ public class ShowWebView extends WebView{
         }
     }
 
+    public void finish(){
+        this.clearHistory();
+        this.clearCache(true);
+        this.freeMemory();
+        this.pauseTimers();
+        this.destroy();
+    }
 }
